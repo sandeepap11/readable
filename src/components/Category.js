@@ -4,8 +4,11 @@ import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
 import * as UUIDGenerator from '../utils/UUIDGenerator';
-import { fetchPostsForCategory } from '../actions';
+import { fetchPostsForCategory, addNewPost } from '../actions';
 import '../App.css';
+
+// To-DO: Category is hardcoded. change to props.
+// Under componentDidMount and in submitPost
 
 class Category extends Component {
 
@@ -24,19 +27,17 @@ class Category extends Component {
   submitPost = (e) => {
 
 		e.preventDefault();
-		const values = serializeForm(e.target, {hash:true});
+		const post = serializeForm(e.target, {hash:true});
 
-    values["timestamp"] = (new Date()).getTime();
-    values["id"] = UUIDGenerator.getUUID();
+    post["timestamp"] = (new Date()).getTime();
+    post["id"] = UUIDGenerator.getUUID();
+    post["category"] = "redux";
 
-		console.log(values);
+		console.log(post);
 
 
-  ReadableAPI.createPost(values).then((body) =>{
-    console.log(body);
+  this.props.newPost(post);
     this.setState({addPostsModalOpen: false});
-    }
-  );
 
 
 
@@ -50,24 +51,24 @@ class Category extends Component {
        console.log(this.props.posts);
      }
 
+
     render(){
       const { addPostsModalOpen } = this.state;
-      const { posts } = this.props
+      const { posts } = this.props;
 
       console.log("from render");
         console.log(posts.posts);
-        let allPosts = posts.posts;
 
 
         return(
             <div>
 
-            <button onClick={this.openAddPostsModal}>Naya Post </button>
-           <h1> Koi posts hain!</h1>
+            <button onClick={this.openAddPostsModal}>Add Post </button>
+           <h1> All Posts for this category</h1>
 
-        {allPosts !== undefined && <ul>
+        {posts.posts !== undefined && <ul>
           {
-             allPosts.map(post => (<li key={ post.id }>
+             posts.posts.map(post => (<li key={ post.id }>
                 <div>
                   <h3>{post.title}</h3>
                   <h4>{post.author}</h4>
@@ -75,7 +76,6 @@ class Category extends Component {
                   <p>{post.voteScore}</p>
                   <p>{post.commentCount}</p>
                   <p>{post.category}</p>
-                  <p>{allPosts.length}</p>
                 </div>
 
                </li>))
@@ -97,10 +97,6 @@ class Category extends Component {
               <input type="text" name="title" placeholder="Enter Title"/><br/>
               <input type="text" name="author" placeholder="Enter Username"/><br/>
               <textarea name="body" placeholder="Write something"/><br/>
-              <select name="category">
-                <option value="redux" >Redux</option>
-                <option value="react" >React</option>
-              </select>
               <button>Post</button>
             </form>
           }
@@ -114,22 +110,23 @@ class Category extends Component {
 }
 
 function mapStateToProps ( {posts} ){
-  console.log("mapping");
-  console.log(posts);
-  console.log("mapping");
+  console.log("Map State To props Pehil baar");
+
 
   return{
 
-  posts
+  posts: posts
 
   }
   }
 
 function mapDispatchToProps(dispatch){
+    console.log("Map Dispatch To props Pehil baar");
 
   return {
 
-    fetchPosts: (data) => { dispatch(fetchPostsForCategory(data)) }
+    fetchPosts: (data) => { dispatch(fetchPostsForCategory(data)) },
+    newPost: (data) => { dispatch(addNewPost(data)) }
 
   }
 }

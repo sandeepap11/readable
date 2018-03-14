@@ -7,6 +7,7 @@ import reducer from './reducers';
 import { Provider } from 'react-redux'
 import './index.css';
 import App from './components/App';
+import Home from './components/Home';
 import Category from './components/Category';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -18,5 +19,5 @@ const store = createStore(
 
 )
 
-ReactDOM.render(<BrowserRouter><Provider store={ store }><Category/></Provider></BrowserRouter>, document.getElementById('root'));
+ReactDOM.render(<BrowserRouter><Provider store={ store }><Home/></Provider></BrowserRouter>, document.getElementById('root'));
 registerServiceWorker();
