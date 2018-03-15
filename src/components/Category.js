@@ -3,7 +3,7 @@ import * as ReadableAPI from '../utils/ReadableAPI';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import serializeForm from 'form-serialize';
-import * as UUIDGenerator from '../utils/UUIDGenerator';
+import * as PostUtils from '../utils/PostUtils';
 import { fetchPostsForCategory, addNewPost } from '../actions';
 import '../App.css';
 
@@ -30,7 +30,7 @@ class Category extends Component {
 		const post = serializeForm(e.target, {hash:true});
 
     post["timestamp"] = (new Date()).getTime();
-    post["id"] = UUIDGenerator.getUUID();
+    post["id"] = PostUtils.getUUID();
     post["category"] = "redux";
 
 		console.log(post);
