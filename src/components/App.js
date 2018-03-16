@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {Route} from 'react-router-dom';
-import Home from './Home';
-import Category from './Category';
+import { Route } from 'react-router-dom';
+import ListPost from './ListPost';
 import '../App.css';
 
 class App extends Component {
@@ -10,22 +9,19 @@ class App extends Component {
 
     return (
 
-      
+
       <div className="app">
-			<Route exact path='/' render={
+        <Route exact path='/' render={
 
-				() => (	<Home/> )
+          () => (<ListPost />)
 
-			}/>
+        } />
 
-			<Route path='/category' render={
+        <Route exact path='/category/:category' component={ListPost} />
 
-				() => (<Category/>)
-			}/>
-
-		  </div>
+      </div>
     )
-    
+
   }
 }
 
