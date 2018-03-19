@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST } from '../actions';
+import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, GET_POST } from '../actions';
 
 function posts(state={}, action){
 
-  const {category, posts, post} = action
+  const {category, posts, post, comments} = action
   switch(action.type){
 
     case LOAD_ALL_POSTS:
@@ -28,6 +28,15 @@ function posts(state={}, action){
 
         ...state,
         posts: state["posts"].concat(post)
+      }
+
+      case GET_POST:
+      post.comments = comments;
+      
+      return{
+        ...state,
+        post: post
+
       }
 
     default:

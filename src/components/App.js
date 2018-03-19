@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import ListPost from './ListPost';
+import Post from './Post';
 import '../App.css';
 
 class App extends Component {
@@ -18,6 +19,7 @@ class App extends Component {
         } />
 
         <Route exact path='/category/:category' component={ListPost} />
+        <Route exact path='/category/:category/post/:postId' component={Post} />
 
       </div>
     )

@@ -3,6 +3,7 @@ import * as ReadableAPI from '../utils/ReadableAPI';
 export const LOAD_ALL_POSTS = "LOAD_ALL_POSTS";
 export const LOAD_POSTS_FOR_CATEGORY = "LOAD_POSTS_FOR_CATEGORY";
 export const ADD_NEW_POST = "ADD_NEW_POST";
+export const GET_POST = "GET_POST";
 
 
 export const loadAllPosts = (posts) => {
@@ -60,3 +61,28 @@ export const addNewPost = (post) => dispatch => {
       .createPost(post)
       .then(posts => dispatch(createNewPost(post)));
 };
+
+export const getPost = (post, comments) => {
+
+
+  console.log("de accion",post);
+    return {
+      type: GET_POST,
+      post,
+      comments
+
+    }
+  
+  }
+  
+  export const fetchPostById = (postId) => dispatch => {
+    console.log("Called");
+    ReadableAPI
+        .getPost(postId)
+        .then(post => {
+          ReadableAPI
+          .getComments(postId)
+          .then(comments => dispatch(getPost(post, comments)));
+
+        });
+  };

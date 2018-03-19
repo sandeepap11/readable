@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as ReadableAPI from '../utils/ReadableAPI';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
 import * as PostUtils from '../utils/PostUtils';
@@ -88,6 +88,8 @@ class ListPost extends Component {
 
   componentWillReceiveProps(nextProps) {
 
+    console.log("WilReceive");
+    
     let selectedCategory = "all";
 
     if (nextProps.match !== undefined && this.props.match.params.category !== nextProps.match.params.category) {
@@ -130,6 +132,10 @@ class ListPost extends Component {
 
 
   render() {
+    console.log("WillRender");
+    
+    
+    
     const {
       categories,
       addPostsModalOpen,
@@ -139,6 +145,8 @@ class ListPost extends Component {
       posts
     } = this.props;
     let selectedCategory = "all";
+
+    console.log(posts);
 
 
     if (this.props.match !== undefined)
@@ -224,7 +232,7 @@ class ListPost extends Component {
             sortedPosts.map(post => (< li className="posts-list"
               key={post.id} >
               <div className="post" >
-                <h2 > {post.title} </h2>
+               <Link to={`/category/${post.category}/post/${post.id}`}> <h2 > {post.title} </h2></Link>
                 <div className="fine-details" >
                   <p> Author: {post.author} </p>
                   <p > Category: {post.category} </p>
@@ -271,12 +279,12 @@ class ListPost extends Component {
           </div>
         } </Modal> </div>);
 
-  }
+  };
 }
 
 function mapStateToProps({ posts }) {
   
-  return { posts }
+  return { posts };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -290,7 +298,7 @@ function mapDispatchToProps(dispatch) {
     newPost: (data) => {
       dispatch(addNewPost(data))
     }
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListPost);
