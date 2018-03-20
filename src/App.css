@@ -74,6 +74,9 @@ a:visited {
   padding-top: 60px;
   margin-left: 220px;
 }
+.post a, .post .post-title{
+  width: 100%;
+}
 
 .btn-add-post {
   position: fixed;

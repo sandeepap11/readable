@@ -7,7 +7,7 @@ import * as ReadableAPI from '../utils/ReadableAPI';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
 import * as PostUtils from '../utils/PostUtils';
-import { fetchAllPosts, fetchPostsForCategory, addNewPost } from '../actions';
+import { setCategory, fetchAllPosts, fetchPostsForCategory, addNewPost, fetchCategories } from '../actions';
 import '../App.css';
 
 class ListPost extends Component {
@@ -47,9 +47,9 @@ class ListPost extends Component {
 
 
 
-    if (this.props.match !== undefined) {
+    if (this.props.categories.category !== undefined) {
       console.log("Gettin");
-      post["category"] = this.props.match.params.category;
+      post["category"] = this.props.categories.category;
 
     }
 
@@ -87,49 +87,56 @@ class ListPost extends Component {
   }
 
 
-  componentWillReceiveProps(nextProps) {
 
-    console.log("WilReceive");
+
+  componentDidMount() {
+
+    console.log("In mount");
+    
+
+    Modal.setAppElement('body');
     
     let selectedCategory = "all";
 
-    if (nextProps.match !== undefined && this.props.match.params.category !== nextProps.match.params.category) {
-      selectedCategory = nextProps.match.params.category;
-
-
-      if (selectedCategory === "all") {
-        nextProps.fetchPosts();
-      } else {
-        nextProps.fetchCategoryPosts(selectedCategory);
-      }
-    }
-  }
-
-  componentDidMount() {
-    console.log("Running again Mount");
-    let selectedCategory = "all";
-
-    if (this.props.match !== undefined)
+    if (this.props.match !== undefined) {
+      
       selectedCategory = this.props.match.params.category;
-
-    Modal.setAppElement('body');
-
-    ReadableAPI.getCategories().then(
-      (categories) => {
-
-        this.setState({
-          categories
-        });
-
-      })
-
+    }
+   
+    console.log("Running  Mount from List");
     if (selectedCategory === "all") {
       this.props.fetchPosts();
     } else {
       this.props.fetchCategoryPosts(selectedCategory);
-    }
+    };
 
+    this.props.setSelectedCategory(selectedCategory);
+  
   }
+
+  componentWillReceiveProps(nextProps) {
+
+    console.log("Will Receive Posts");
+
+    if (nextProps.match !== undefined && this.props.match.params.category !== nextProps.match.params.category) {
+
+      let selectedCategory = "all";
+      selectedCategory = nextProps.match.params.category;
+    
+
+    console.log("Running  Mount from List");
+    if (selectedCategory === "all") {
+      nextProps.fetchPosts();
+    } else {
+      nextProps.fetchCategoryPosts(selectedCategory);
+    }
+    nextProps.setSelectedCategory(selectedCategory);
+
+  } 
+  
+  }
+
+  
 
 
   render() {
@@ -137,14 +144,8 @@ class ListPost extends Component {
     
     
     
-    const {
-      categories,
-      addPostsModalOpen,
-      sorter
-    } = this.state;
-    const {
-      posts
-    } = this.props;
+    const { addPostsModalOpen, sorter } = this.state;
+    const { posts, categories } = this.props;
     let selectedCategory = "all";
 
     console.log(posts);
@@ -152,6 +153,9 @@ class ListPost extends Component {
 
     if (this.props.match !== undefined)
       selectedCategory = this.props.match.params.category;
+      if (categories.category !== undefined){
+        selectedCategory = categories.category;
+      }
 
     console.log("from render", selectedCategory);
     let sortedPosts = [];
@@ -171,42 +175,7 @@ class ListPost extends Component {
     }
 
     return (<div>
-      <div className="top-bar" >
-        <Link to="/" >
-          <div className="home-icon" > </div> </Link >
-        <h1 className="title" > < Link to="/" > READABLE! </Link></h1>
-      </div>
-
-      <div className="categories">
-        <h3> CATEGORIES </h3> <div className="categories-list" >
-
-          {<ul> {
-            categories.map(
-              category =>
-                (
-                  (selectedCategory === category.name && <li className="selected-category"
-                    key={
-                      category.name
-                    } > {
-                      capitalize.words(category.name)
-                    } </li>) ||
-
-                  (selectedCategory !== category.name && <li key={
-                    category.name
-                  } >
-                    <Link to={
-                      `/category/${category.name}`
-                    } > {
-                        capitalize.words(category.name)
-                      } </Link> </li >)
-                )
-            )
-
-          }
-
-          </ul>} </div >
-      </div>
-
+      
       <div className="posts" >
         <button className="btn-add-post"
           onClick={
@@ -255,7 +224,7 @@ class ListPost extends Component {
               {selectedCategory === "all" &&
                 <select name="category" >
                   {
-                    categories.map((category) => (<option value={category.name} key={category.name}>
+                    categories.categories.map((category) => (<option value={category.name} key={category.name}>
                       {capitalize.words(category.name)} </option>))
                   }
                 </select>}
@@ -268,23 +237,28 @@ class ListPost extends Component {
   };
 }
 
-function mapStateToProps({ posts }) {
+function mapStateToProps({ posts, categories }) {
   
-  return { posts };
+  return { posts,
+  categories };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchPosts: () => {
-      dispatch(fetchAllPosts())
+      dispatch(fetchAllPosts());
     },
     fetchCategoryPosts: (data) => {
-      dispatch(fetchPostsForCategory(data))
+      dispatch(fetchPostsForCategory(data));
     },
     newPost: (data) => {
-      dispatch(addNewPost(data))
+      dispatch(addNewPost(data));
+    },
+    setSelectedCategory: (data) => {
+      dispatch(setCategory(data))
     }
-  };
+  }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListPost);

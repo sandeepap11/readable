@@ -1,12 +1,43 @@
 import { combineReducers } from 'redux';
-import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, GET_POST, ADD_NEW_COMMENT } from '../actions';
+import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, 
+  GET_POST, ADD_NEW_COMMENT, SET_CATEGORY, LOAD_CATEGORIES} from '../actions';
 
-function posts(state={}, action){
+function categories(state={}, action) {
 
-  const {category, posts, post, comments, comment} = action
+  const {categories, category} = action;
+  switch(action.type){
+
+    
+    
+    case SET_CATEGORY: 
+
+    console.log("In set reducer", category);
+      return{
+        ...state,
+        category: category
+      };
+
+      
+      case LOAD_CATEGORIES: 
+      return{
+        ...state,
+        categories: categories
+      };
+
+    default: 
+      return state;
+    }
+}
+
+
+function posts(state={}, action) {
+
+  const {category, posts, post, comments, comment} = action;
   switch(action.type){
 
     case LOAD_ALL_POSTS:
+    console.log("All posts le rahe hai");
+    
 
       return{
 
@@ -14,6 +45,7 @@ function posts(state={}, action){
         posts: posts
       };
 
+    
     case LOAD_POSTS_FOR_CATEGORY:
 
       return{
@@ -58,4 +90,4 @@ function posts(state={}, action){
   }
 }
 
-export default combineReducers({ posts })
+export default combineReducers({ posts, categories })

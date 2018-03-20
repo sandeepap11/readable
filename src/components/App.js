@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import Navigator from './Navigator';
 import ListPost from './ListPost';
 import Post from './Post';
 import '../App.css';
 
 class App extends Component {
 
-  render() {
+  
 
+  render() {
+    console.log("Render of App");
+    
+    
     return (
 
+   
 
       <div className="app">
+      <Navigator/>
+      
+
         <Route exact path='/' render={
 
           () => (<ListPost />)

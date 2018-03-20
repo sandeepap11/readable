@@ -19,6 +19,8 @@ class Post extends Component {
     
       }
 
+      
+
       componentWillReceiveProps(nextProps){
         console.log("Received next in WillReceive in Posts. Props next.");
         
@@ -55,7 +57,7 @@ class Post extends Component {
 
         return (
             
-            <div>
+            <div className="posts">
                 <PostView post={ post } showComments={ true } submitComment={this.submitComment}/>
             </div>
 

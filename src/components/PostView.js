@@ -28,7 +28,7 @@ class PostView extends Component {
             <div>
             {(post !== undefined) && ( <div className="post" >
             {showComments ? (<h2 > {post.title} </h2>) 
-                            : (<Link to={`/category/${post.category}/post/${post.id}`}> <h2 > {post.title} </h2></Link>)}
+                            : (<Link to={`/category/${post.category}/post/${post.id}`}><h2> {post.title} </h2></Link>)}
                             <div className="fine-details">
                             <p> Author: {post.author} </p>
                             <p > Category: {post.category} </p>

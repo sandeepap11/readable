@@ -1,11 +1,43 @@
 import * as ReadableAPI from '../utils/ReadableAPI';
 
+export const SET_CATEGORY = "SET_CATEGORY";
+export const LOAD_CATEGORIES = "LOAD_CATEGORIES";
 export const LOAD_ALL_POSTS = "LOAD_ALL_POSTS";
 export const LOAD_POSTS_FOR_CATEGORY = "LOAD_POSTS_FOR_CATEGORY";
 export const ADD_NEW_POST = "ADD_NEW_POST";
 export const GET_POST = "GET_POST";
 export const ADD_NEW_COMMENT = "ADD_NEW_COMMENT";
 
+export const setCategory = (category) => {
+  console.log("In set action", category);
+    return {
+      type: SET_CATEGORY,
+      category  
+    }
+  
+  };
+
+
+export const loadCategories = (categories) => {
+
+
+  console.log(categories);
+    return {
+      type: LOAD_CATEGORIES,
+      categories
+  
+    }
+  
+  };
+  
+export const fetchCategories = () => dispatch => {
+
+  console.log("Categorized action");
+  
+    ReadableAPI
+        .getCategories()
+        .then(categories => dispatch(loadCategories(categories)));
+  };
 
 export const loadAllPosts = (posts) => {
 
