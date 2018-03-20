@@ -37,21 +37,17 @@ class Navigator extends Component{
             categories.categories.map(
               category =>
                 (
-                  (selectedCategory === category.name && <li className="selected-category"
-                    key={
-                      category.name
-                    } > {
-                      capitalize.words(category.name)
-                    } </li>) ||
-
-                  (selectedCategory !== category.name && <Link to={
+                  (<Link to={
                     `/category/${category.name}`
-                  } ><li key={
+                  } ><li className=
+                  { ((selectedCategory === category.name) && ("selected-category"))
+                  || (selectedCategory !== category.name) && ("")} key={
                     category.name
                   } >
                      {
                         capitalize.words(category.name)
-                      }  </li ></Link>)
+                      }  </li ></Link>) 
+                   
                 )
             )
 

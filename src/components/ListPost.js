@@ -217,7 +217,7 @@ class ListPost extends Component {
             <button className="modal-close"
               onClick={this.closeAddPostsModalOpen} >
             </button>
-            <h1 className="posts-heading" > New Post </h1>
+            <h1 className="posts-heading" > New {selectedCategory === "all" ? "" : `${ capitalize(selectedCategory) } `}Post </h1>
             <form onSubmit={this.submitPost} >
               <input type="text" name="title" placeholder="Enter Title" required />
               <input type="text" name="author" placeholder="Enter Username" required />
