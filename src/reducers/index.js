@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, GET_POST } from '../actions';
+import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, GET_POST, ADD_NEW_COMMENT } from '../actions';
 
 function posts(state={}, action){
 
-  const {category, posts, post, comments} = action
+  const {category, posts, post, comments, comment} = action
   switch(action.type){
 
     case LOAD_ALL_POSTS:
@@ -12,7 +12,7 @@ function posts(state={}, action){
 
         ...state,
         posts: posts
-      }
+      };
 
     case LOAD_POSTS_FOR_CATEGORY:
 
@@ -20,7 +20,7 @@ function posts(state={}, action){
 
         ...state,
         posts: posts.filter((post) => post.category === category)
-      }
+      };
 
       case ADD_NEW_POST:
 
@@ -28,7 +28,7 @@ function posts(state={}, action){
 
         ...state,
         posts: state["posts"].concat(post)
-      }
+      };
 
       case GET_POST:
       post.comments = comments;
@@ -37,10 +37,24 @@ function posts(state={}, action){
         ...state,
         post: post
 
-      }
+      };
+
+      case ADD_NEW_COMMENT:
+      console.log(state);
+      
+      
+      return{
+
+        ...state,
+        post: {
+          ...state.post,
+          commentCount: state.post.commentCount + 1,
+          comments: state.post.comments.concat(comment)
+        }
+      };
 
     default:
-      return state
+      return state;
   }
 }
 

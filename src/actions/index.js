@@ -4,6 +4,7 @@ export const LOAD_ALL_POSTS = "LOAD_ALL_POSTS";
 export const LOAD_POSTS_FOR_CATEGORY = "LOAD_POSTS_FOR_CATEGORY";
 export const ADD_NEW_POST = "ADD_NEW_POST";
 export const GET_POST = "GET_POST";
+export const ADD_NEW_COMMENT = "ADD_NEW_COMMENT";
 
 
 export const loadAllPosts = (posts) => {
@@ -16,7 +17,7 @@ console.log(posts);
 
   }
 
-}
+};
 
 export const fetchAllPosts = () => dispatch => {
   console.log("Called");
@@ -36,7 +37,7 @@ console.log(posts);
 
   }
 
-}
+};
 
 export const fetchPostsForCategory = (category) => dispatch => {
   console.log("Called");
@@ -53,13 +54,13 @@ export const createNewPost = (post) => {
 
   }
 
-}
+};
 
 export const addNewPost = (post) => dispatch => {
   console.log("Called");
   ReadableAPI
       .createPost(post)
-      .then(posts => dispatch(createNewPost(post)));
+      .then(post => dispatch(createNewPost(post)));
 };
 
 export const getPost = (post, comments) => {
@@ -73,7 +74,7 @@ export const getPost = (post, comments) => {
 
     }
   
-  }
+  };
   
   export const fetchPostById = (postId) => dispatch => {
     console.log("Called");
@@ -85,4 +86,21 @@ export const getPost = (post, comments) => {
           .then(comments => dispatch(getPost(post, comments)));
 
         });
+  };
+
+  export const createNewComment = (comment) => {
+
+    return {
+      type: ADD_NEW_COMMENT,
+      comment
+  
+    }
+  
+  }
+  
+  export const addNewComment = (comment) => dispatch => {
+    console.log("Called");
+    ReadableAPI
+        .comment(comment)
+        .then(comment => dispatch(createNewComment(comment)));
   };

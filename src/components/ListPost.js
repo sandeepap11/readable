@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import * as ReadableAPI from '../utils/ReadableAPI';
-import Modal from 'react-modal';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Modal from 'react-modal';
+import PostView from './PostView';
+import * as ReadableAPI from '../utils/ReadableAPI';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
 import * as PostUtils from '../utils/PostUtils';
@@ -231,22 +232,7 @@ class ListPost extends Component {
           sortedPosts !== undefined && <ul > {
             sortedPosts.map(post => (< li className="posts-list"
               key={post.id} >
-              <div className="post" >
-               <Link to={`/category/${post.category}/post/${post.id}`}> <h2 > {post.title} </h2></Link>
-                <div className="fine-details" >
-                  <p> Author: {post.author} </p>
-                  <p > Category: {post.category} </p>
-                  <p> Posted on: {PostUtils.getDate(post.timestamp)} </p>
-                </div>
-                <div className="post-body" >
-                  <p > {post.body} </p>
-                </div>
-                <div className="post-counts" >
-                  <p> Votes: {post.voteScore} </p>
-                  <p> Comments: {post.commentCount} </p>
-                </div>
-
-              </div>
+              <PostView post={ post } showComments={ false }/>
             </li>))}
 
           </ul>} </div >
