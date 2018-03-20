@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import serializeForm from 'form-serialize';
+import capitalize from 'capitalize';
 import * as PostUtils from '../utils/PostUtils';
 
 class PostView extends Component {
@@ -30,16 +31,18 @@ class PostView extends Component {
             {showComments ? (<h2 > {post.title} </h2>) 
                             : (<Link to={`/category/${post.category}/post/${post.id}`}><h2> {post.title} </h2></Link>)}
                             <div className="fine-details">
-                            <p> Author: {post.author} </p>
-                            <p > Category: {post.category} </p>
-                            <p> Posted on: {PostUtils.getDate(post.timestamp)} </p>
+                            <p> { post.author } </p>
+                            <p> { capitalize(post.category) } </p>
+                            <p>  {PostUtils.getDate(post.timestamp)} </p>
                             </div>
                             <div className="post-body" >
                             <p > {post.body} </p>
                             </div>
                             <div className="post-counts" >
-                            <p> Votes: {post.voteScore} </p>
-                            <p> Comments: {post.commentCount} </p>
+                             <div className="votes"><div className="upvote"></div> <div className="downvote"></div> 
+                             <p>{post.voteScore} </p></div>
+                             <div className="votes"><div className="comments"></div> 
+                             <p> {post.commentCount} </p></div>
                             </div>
                         { (showComments) && (post.commentCount > 0) && (post.comments.length > 0) && <div className="comments-section">
                         <h5>COMMENTS</h5>
@@ -48,14 +51,15 @@ class PostView extends Component {
                             
                                 <li className="comment" key={comment.id}>
                                     <div className="fine-comment-details">
-                                <p> Author: {comment.author} </p>
-                                <p> Posted on: {PostUtils.getDate(comment.timestamp)} </p>
+                                <p> {comment.author} </p>
+                                <p> {PostUtils.getDate(comment.timestamp)} </p>
                                 </div>
                                 <div className="comment-body" >
                                 <p > {comment.body} </p>
                                 </div>
                                 <div className="comment-counts" >
-                                <p> Votes: {comment.voteScore} </p>
+                                <div className="votes"><div className="upvote"></div> <div className="downvote"></div> 
+                                    <p>{post.voteScore} </p></div>
                                 </div>                                                   
                                 
                                 </li>))}
