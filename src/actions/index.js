@@ -11,40 +11,34 @@ export const VOTE_POST = "VOTE_POST";
 export const VOTE_COMMENT = "VOTE_COMMENT";
 
 export const setCategory = (category) => {
-  console.log("In set action", category);
-    return {
-      type: SET_CATEGORY,
-      category  
-    }
-  
-  };
+
+  return {
+    type: SET_CATEGORY,
+    category
+  }
+
+};
 
 
 export const loadCategories = (categories) => {
 
+  return {
+    type: LOAD_CATEGORIES,
+    categories
 
-  console.log(categories);
-    return {
-      type: LOAD_CATEGORIES,
-      categories
-  
-    }
-  
-  };
-  
+  }
+
+};
+
 export const fetchCategories = () => dispatch => {
 
-  console.log("Categorized action");
-  
-    ReadableAPI
-        .getCategories()
-        .then(categories => dispatch(loadCategories(categories)));
-  };
+  ReadableAPI
+    .getCategories()
+    .then(categories => dispatch(loadCategories(categories)));
+};
 
 export const loadAllPosts = (posts) => {
 
-
-console.log(posts);
   return {
     type: LOAD_ALL_POSTS,
     posts
@@ -54,16 +48,14 @@ console.log(posts);
 };
 
 export const fetchAllPosts = () => dispatch => {
-  console.log("Called");
+
   ReadableAPI
-      .getPosts()
-      .then(posts => dispatch(loadAllPosts(posts)));
+    .getPosts()
+    .then(posts => dispatch(loadAllPosts(posts)));
 };
 
 export const loadPostsForCategory = (category, posts) => {
 
-
-console.log(posts);
   return {
     type: LOAD_POSTS_FOR_CATEGORY,
     category,
@@ -74,10 +66,10 @@ console.log(posts);
 };
 
 export const fetchPostsForCategory = (category) => dispatch => {
-  console.log("Called");
+
   ReadableAPI
-      .getCategoryPosts(category)
-      .then(posts => dispatch(loadPostsForCategory(category, posts)));
+    .getCategoryPosts(category)
+    .then(posts => dispatch(loadPostsForCategory(category, posts)));
 };
 
 export const createNewPost = (post) => {
@@ -91,86 +83,84 @@ export const createNewPost = (post) => {
 };
 
 export const addNewPost = (post) => dispatch => {
-  console.log("Called");
+
   ReadableAPI
-      .createPost(post)
-      .then(post => dispatch(createNewPost(post)));
+    .createPost(post)
+    .then(post => dispatch(createNewPost(post)));
 };
 
 export const getPost = (post, comments) => {
 
+  return {
+    type: GET_POST,
+    post,
+    comments
 
-  console.log("de accion",post);
-    return {
-      type: GET_POST,
-      post,
-      comments
-
-    }
-  
-  };
-  
-  export const fetchPostById = (postId) => dispatch => {
-    console.log("Called");
-    ReadableAPI
-        .getPost(postId)
-        .then(post => {
-          ReadableAPI
-          .getComments(postId)
-          .then(comments => dispatch(getPost(post, comments)));
-
-        });
-  };
-
-  export const createNewComment = (comment) => {
-
-    return {
-      type: ADD_NEW_COMMENT,
-      comment
-  
-    }
-  
   }
-  
-  export const addNewComment = (comment) => dispatch => {
-    console.log("Called");
-    ReadableAPI
-        .comment(comment)
-        .then(comment => dispatch(createNewComment(comment)));
-  };
 
-  export const votePost = (post, option) => {
+};
 
-    return {
-      type: VOTE_POST,
-      post,
-      option
-  
-    }
-  
+export const fetchPostById = (postId) => dispatch => {
+
+  ReadableAPI
+    .getPost(postId)
+    .then(post => {
+      ReadableAPI
+        .getComments(postId)
+        .then(comments => dispatch(getPost(post, comments)));
+
+    });
+};
+
+export const createNewComment = (comment) => {
+
+  return {
+    type: ADD_NEW_COMMENT,
+    comment
+
   }
-  
-  export const voteForPost = (postId, option) => dispatch => {
-    console.log("Called", option, postId);
-    ReadableAPI
-        .votePost(postId, option)
-        .then(post => dispatch(votePost(post, option)));
-  };
 
-  export const voteComment = (comment, option) => {
+}
 
-    return {
-      type: VOTE_COMMENT,
-      comment,
-      option
-  
-    }
-  
+export const addNewComment = (comment) => dispatch => {
+
+  ReadableAPI
+    .comment(comment)
+    .then(comment => dispatch(createNewComment(comment)));
+};
+
+export const votePost = (post, option) => {
+
+  return {
+    type: VOTE_POST,
+    post,
+    option
+
   }
-  
-  export const voteForComment = (commentId, option) => dispatch => {
-    console.log("Called");
-    ReadableAPI
-        .voteComment(commentId, option)
-        .then(comment => dispatch(voteComment(comment, option)));
-  };
+
+}
+
+export const voteForPost = (postId, option) => dispatch => {
+
+  ReadableAPI
+    .votePost(postId, option)
+    .then(post => dispatch(votePost(post, option)));
+};
+
+export const voteComment = (comment, option) => {
+
+  return {
+    type: VOTE_COMMENT,
+    comment,
+    option
+
+  }
+
+}
+
+export const voteForComment = (commentId, option) => dispatch => {
+
+  ReadableAPI
+    .voteComment(commentId, option)
+    .then(comment => dispatch(voteComment(comment, option)));
+};

@@ -7,19 +7,13 @@ import '../App.css';
 
 class App extends Component {
 
-  
-
   render() {
-    console.log("Render of App");
-    
-    
+
     return (
 
-   
-
       <div className="app">
-      <Navigator/>
-      
+        <Navigator />
+
 
         <Route exact path='/' render={
 

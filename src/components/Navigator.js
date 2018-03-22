@@ -2,25 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import capitalize from 'capitalize';
-import { fetchCategories, setCategory  } from '../actions';
+import { fetchCategories, setCategory } from '../actions';
 
-class Navigator extends Component{
+class Navigator extends Component {
 
-    componentDidMount() {
-        console.log("Running again Mount");
-        this.props.getCategories();
-    
-            this.props.setSelectedCategory("all");
-      }
+  componentDidMount() {
+    this.props.getCategories();
+    this.props.setSelectedCategory("all");
+  }
 
+  render() {
 
-    render(){
-
-        const { categories, category } = this.props;
-
-        console.log("render", Object.values(categories));
-        
-        
+    const { categories, category } = this.props;
 
     return (<div>
       <div className="top-bar" >
@@ -32,59 +25,54 @@ class Navigator extends Component{
       <div className="categories">
         <h3> CATEGORIES </h3> <div className="categories-list" >
 
-         <ul> {
+          <ul> {
             categories.map(
               thisCategory =>
                 (
-                  (<Link key={ thisCategory } to={
-                    `/category/${thisCategory}`
-                  } ><li className=
-                  { ((thisCategory === category) && ("selected-category"))
-                  || (thisCategory !== category) && ("") 
-                  } >
-                     {
-                        capitalize.words(thisCategory)
-                      }  </li ></Link>) 
-                   
+                  (<Link key={thisCategory} to={`/category/${thisCategory}`}>
+                    {(thisCategory === category) &&
+                      <li className="selected-category">
+                        {capitalize.words(thisCategory)}
+                      </li >}
+                    {(thisCategory !== category) &&
+                      <li className="">
+                        {capitalize.words(thisCategory)}
+                      </li >}
+                  </Link>)
                 )
             )
-
           }
-
           </ul> </div >
       </div>
+    </div>);
+  };
+}
 
+function mapStateToProps({ categories }) {
 
-      </div>);
-      };
+  let categoryList = [];
+
+  if (categories.categories !== undefined) {
+
+    categoryList = categories.categories.reduce((result, category) => {
+      result.push(category.name);
+      return result;
+
+    }, []);
+  }
+
+  return { categories: categoryList, category: categories.category };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getCategories: () => {
+      dispatch(fetchCategories())
+    },
+    setSelectedCategory: (data) => {
+      dispatch(setCategory(data))
     }
+  };
+}
 
-    function mapStateToProps({ categories }) {
-       
-        let categoryList = [];
-
-        if(categories.categories !== undefined){
-        console.group("From map state", categories);
-
-        categoryList = categories.categories.reduce((result, category) => {
-            result.push (category.name);
-            return result;
-
-        } , []);}
-        
-        console.groupEnd({ categories: categoryList, category: categories.category});
-        return { categories: categoryList, category: categories.category};
-      }
-      
-      function mapDispatchToProps(dispatch) {
-        return {
-          getCategories: () => {
-            dispatch(fetchCategories())
-          },
-          setSelectedCategory: (data) => {
-            dispatch(setCategory(data))
-          }
-        };
-      }
-      
-      export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
+export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
