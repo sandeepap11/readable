@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, 
-  GET_POST, ADD_NEW_COMMENT, SET_CATEGORY, LOAD_CATEGORIES} from '../actions';
+  GET_POST, ADD_NEW_COMMENT, SET_CATEGORY, LOAD_CATEGORIES, VOTE_POST, VOTE_COMMENT} from '../actions';
 
 function categories(state={}, action) {
 
@@ -32,17 +32,25 @@ function categories(state={}, action) {
 
 function posts(state={}, action) {
 
-  const {category, posts, post, comments, comment} = action;
+  const {category, posts, post, comments, comment, option} = action;
+  let vote = 1;
   switch(action.type){
 
     case LOAD_ALL_POSTS:
-    console.log("All posts le rahe hai");
+    console.log("from load",posts);
     
+   
 
       return{
 
         ...state,
-        posts: posts
+        posts: posts.reduce((result, post) => {
+          result[post.id] = Object.entries(post).reduce((object, entry)=>{
+            object[entry[0]] = entry[1];
+            return object
+            },{});
+            return result
+      }, {})
       };
 
     
@@ -51,7 +59,13 @@ function posts(state={}, action) {
       return{
 
         ...state,
-        posts: posts.filter((post) => post.category === category)
+        posts: posts.filter((post) => post.category === category).reduce((result, post) => {
+          result[post.id] = Object.entries(post).reduce((object, entry)=>{
+            object[entry[0]] = entry[1];
+            return object
+            },{});
+            return result
+      }, {})
       };
 
       case ADD_NEW_POST:
@@ -59,31 +73,82 @@ function posts(state={}, action) {
       return{
 
         ...state,
-        posts: state["posts"].concat(post)
+        posts: {...state.posts,
+                    [post.id]: post}
       };
 
       case GET_POST:
-      post.comments = comments;
-      
+            
       return{
         ...state,
-        post: post
+        posts: {...state.posts,
+        [post.id]:{...post,
+        comments:comments.map(comment => comment.id)
+          } 
+         },
+        comments: comments.reduce((result, comment) => {
+          result[comment.id] = Object.entries(comment).reduce((object, entry)=>{
+            object[entry[0]] = entry[1];
+            return object
+            },{});
+            return result
+      }, {})
 
       };
 
       case ADD_NEW_COMMENT:
-      console.log(state);
-      
+           
       
       return{
 
         ...state,
-        post: {
-          ...state.post,
-          commentCount: state.post.commentCount + 1,
-          comments: state.post.comments.concat(comment)
+        posts: {
+          ...state.posts,
+          [comment.parentId]:{
+            ...state.posts[comment.parentId],           
+            comments: state.posts[comment.parentId].comments.concat(comment.id),
+            commentCount: state.posts[comment.parentId].commentCount + 1
+          }
+        },
+        comments: {
+          ...state.comments,
+          [comment.id]: comment
         }
       };
+
+      case VOTE_POST:
+      if(option === "downVote"){
+          vote = -1;
+      }
+
+        return{
+          ...state,
+          posts: {...state.posts,
+            [post.id]:{
+              ...state.posts[post.id],
+              voteScore: state.posts[post.id].voteScore + vote
+            }
+          
+        } 
+
+        }
+
+      case VOTE_COMMENT: 
+      if(option === "downVote"){
+        vote = -1;
+    }
+                
+        return{
+            ...state,
+           comments: {
+             ...state.comments,
+             [comment.id]:{
+               ...state.comments[comment.id],
+               voteScore: state.comments[comment.id].voteScore + vote
+             }
+           }
+            }
+        
 
     default:
       return state;

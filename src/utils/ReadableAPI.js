@@ -80,7 +80,7 @@ fetch(`${api}/comments/${commentId}`, { headers })
 .then(res => res.json())
 
 export const voteComment = (commentId, option) =>
-fetch(`${api}/posts/${commentId}`, {
+fetch(`${api}/comments/${commentId}`, {
   method: 'POST',
   headers: {
     ...headers,

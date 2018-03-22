@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import PostView from './PostView';
-import { fetchPostById, addNewComment } from '../actions';
+import { fetchPostById, addNewComment, voteForPost } from '../actions';
 import * as PostUtils from '../utils/PostUtils';
 
 class Post extends Component {
@@ -37,28 +37,26 @@ class Post extends Component {
         comment["parentId"] = postId;
     
         console.log(comment);
-    
-    
         this.props.newComment(comment);
     
-    
-    
       }
+    
 
+      
     render() {
-      console.log("Rendering ...");
+      console.log("Rendering Post...");
       
         console.log(this.props.posts);
         
-         const {post} = this.props.posts;
-       console.log(post);
+         const {posts} = this.props;
+         const {postId} = this.props.match.params;
        
         
 
         return (
             
             <div className="posts">
-                <PostView post={ post } showComments={ true } submitComment={this.submitComment}/>
+                {posts[postId] !== undefined && posts[postId].comments !== undefined && <PostView post={ posts[postId] } showComments={ true } submitComment={this.submitComment}/>}
             </div>
 
         )
@@ -66,10 +64,15 @@ class Post extends Component {
 }
 
 function mapStateToProps({ posts }) {
-    console.log("map state");
-    
+    console.log("map state", posts);
+    let postValue = {};
   
-    return { posts };
+    if(posts.posts !== undefined)
+    postValue = posts.posts;
+   
+console.log("from maps Post", {posts: postValue});
+
+    return {posts: postValue};
   }
   
   function mapDispatchToProps(dispatch) {

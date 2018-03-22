@@ -14,7 +14,6 @@ class ListPost extends Component {
 
   state = {
     addPostsModalOpen: false,
-    categories: [],
     sorter: {
       ascending: false,
       timestamp: true
@@ -44,14 +43,9 @@ class ListPost extends Component {
     post["id"] = PostUtils.getUUID();
     post["voteScore"] = 1;
     post["commentCount"] = 0;
-
-
-
-    if (this.props.categories.category !== undefined) {
-      console.log("Gettin");
-      post["category"] = this.props.categories.category;
-
-    }
+    
+    if(this.props.category !== "all")
+    post["category"] = this.props.category;
 
     console.log(post);
 
@@ -145,30 +139,26 @@ class ListPost extends Component {
     
     
     const { addPostsModalOpen, sorter } = this.state;
-    const { posts, categories } = this.props;
-    let selectedCategory = "all";
+    const { posts, categories, category } = this.props;
+    let loading = true;
 
-    console.log(posts);
+    Object.values(posts).length > 0 &&   console.log(Object.values(posts)[0].id);
 
-
-    if (this.props.match !== undefined)
-      selectedCategory = this.props.match.params.category;
-      if (categories.category !== undefined){
-        selectedCategory = categories.category;
-      }
-
-    console.log("from render", selectedCategory);
+    console.log("from render de ListPost", category);
     let sortedPosts = [];
-    if (posts.posts !== undefined) {
-      sortedPosts = posts.posts.sort((a, b) => (b.timestamp - a.timestamp));
+    sortedPosts = Object.keys(posts).forEach((key, value) => value);
+
+    if (Object.values(posts).length > 0) {
+      loading = false;
+      sortedPosts = Object.values(posts).sort((a, b) => (b.timestamp - a.timestamp));
       if (!sorter.timestamp) {
         if (sorter.ascending) {
-          sortedPosts = posts.posts.sort((a, b) => (a.voteScore - b.voteScore));
+          sortedPosts = Object.values(posts).sort((a, b) => (a.voteScore - b.voteScore));
         } else {
-          sortedPosts = posts.posts.sort((a, b) => (b.voteScore - a.voteScore));
+          sortedPosts = Object.values(posts).sort((a, b) => (b.voteScore - a.voteScore));
         }
       } else if (sorter.ascending) {
-        sortedPosts = posts.posts.sort((a, b) => (a.timestamp - b.timestamp));
+        sortedPosts = Object.values(posts).sort((a, b) => (a.timestamp - b.timestamp));
       }
 
 
@@ -177,12 +167,13 @@ class ListPost extends Component {
     return (<div>
       
       <div className="posts" >
+      {loading && <div>Loadin ...</div>}
         <button className="btn-add-post"
           onClick={
             this.openAddPostsModal
           } > New Post </button> <div className="posts-header" >
           <h1 className="posts-heading" > {
-            capitalize.words(`${selectedCategory} posts`)
+            capitalize.words(`${category} posts`)
           } </h1>
           <div className="posts-sort" >
             Sort By < select onChange={
@@ -217,15 +208,15 @@ class ListPost extends Component {
             <button className="modal-close"
               onClick={this.closeAddPostsModalOpen} >
             </button>
-            <h1 className="posts-heading" > New {selectedCategory === "all" ? "" : `${ capitalize(selectedCategory) } `}Post </h1>
+            <h1 className="posts-heading" > New {category === "all" ? "" : `${ capitalize(category) } `}Post </h1>
             <form onSubmit={this.submitPost} >
               <input type="text" name="title" placeholder="Enter Title" required />
               <input type="text" name="author" placeholder="Enter Username" required />
-              {selectedCategory === "all" &&
+              {category === "all" &&
                 <select name="category" >
                   {
-                    categories.categories.map((category) => (<option value={category.name} key={category.name}>
-                      {capitalize.words(category.name)} </option>))
+                    categories.map((thisCategory) => (<option value={thisCategory} key={thisCategory}>
+                      {capitalize.words(thisCategory)} </option>))
                   }
                 </select>}
               <textarea name="body" placeholder="Write something" required />
@@ -238,9 +229,28 @@ class ListPost extends Component {
 }
 
 function mapStateToProps({ posts, categories }) {
+  let postList ={} , categoryList = [];
   
-  return { posts,
-  categories };
+  if(categories.categories !== undefined){
+  categoryList = categories.categories.reduce((result, category) => {
+    result.push(category.name);
+    return result;
+} , []);
+}
+
+if(posts.posts !== undefined){
+  console.log(posts);
+  
+
+  postList = posts.posts;
+}
+console.log("from m2s", { posts: postList,
+  categories: categoryList, category: categories.category });
+
+
+
+  return { posts: postList,
+    categories: categoryList, category: categories.category };
 }
 
 function mapDispatchToProps(dispatch) {

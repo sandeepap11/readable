@@ -16,11 +16,10 @@ class Navigator extends Component{
 
     render(){
 
-        const { categories } = this.props;
-        console.log(categories);
+        const { categories, category } = this.props;
+
+        console.log("render", Object.values(categories));
         
-        const selectedCategory = categories.category;
-        console.log(selectedCategory);
         
 
     return (<div>
@@ -33,18 +32,18 @@ class Navigator extends Component{
       <div className="categories">
         <h3> CATEGORIES </h3> <div className="categories-list" >
 
-          {categories.categories !== undefined && <ul> {
-            categories.categories.map(
-              category =>
+         <ul> {
+            categories.map(
+              thisCategory =>
                 (
-                  (<Link key={ category.name } to={
-                    `/category/${category.name}`
+                  (<Link key={ thisCategory } to={
+                    `/category/${thisCategory}`
                   } ><li className=
-                  { ((selectedCategory === category.name) && ("selected-category"))
-                  || (selectedCategory !== category.name) && ("") 
+                  { ((thisCategory === category) && ("selected-category"))
+                  || (thisCategory !== category) && ("") 
                   } >
                      {
-                        capitalize.words(category.name)
+                        capitalize.words(thisCategory)
                       }  </li ></Link>) 
                    
                 )
@@ -52,7 +51,7 @@ class Navigator extends Component{
 
           }
 
-          </ul>} </div >
+          </ul> </div >
       </div>
 
 
@@ -61,8 +60,20 @@ class Navigator extends Component{
     }
 
     function mapStateToProps({ categories }) {
-  
-        return { categories };
+       
+        let categoryList = [];
+
+        if(categories.categories !== undefined){
+        console.group("From map state", categories);
+
+        categoryList = categories.categories.reduce((result, category) => {
+            result.push (category.name);
+            return result;
+
+        } , []);}
+        
+        console.groupEnd({ categories: categoryList, category: categories.category});
+        return { categories: categoryList, category: categories.category};
       }
       
       function mapDispatchToProps(dispatch) {
