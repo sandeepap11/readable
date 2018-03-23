@@ -46,9 +46,7 @@ class ListPost extends Component {
       post["category"] = this.props.category;
 
     this.props.newPost(post);
-    this.setState({
-      addPostsModalOpen: false
-    });
+    this.closeAddPostsModalOpen();
   }
 
   sortSelect = (target) => {

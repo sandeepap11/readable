@@ -90,7 +90,7 @@ export const voteComment = (commentId, option) =>
   }).then(res => res.json())
 
 export const updateComment = (commentId, body) =>
-  fetch(`${api}/posts/${commentId}`, {
+  fetch(`${api}/comments/${commentId}`, {
     method: 'PUT',
     headers: {
       ...headers,

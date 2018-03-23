@@ -9,6 +9,10 @@ export const GET_POST = "GET_POST";
 export const ADD_NEW_COMMENT = "ADD_NEW_COMMENT";
 export const VOTE_POST = "VOTE_POST";
 export const VOTE_COMMENT = "VOTE_COMMENT";
+export const UPDATE_POST = "UPDATE_POST";
+export const UPDATE_COMMENT = "UPDATE_COMMENT";
+export const DELETE_POST = "DELETE_POST";
+export const DELETE_COMMENT = "DELETE_COMMENT";
 
 export const setCategory = (category) => {
 
@@ -18,7 +22,6 @@ export const setCategory = (category) => {
   }
 
 };
-
 
 export const loadCategories = (categories) => {
 
@@ -163,4 +166,72 @@ export const voteForComment = (commentId, option) => dispatch => {
   ReadableAPI
     .voteComment(commentId, option)
     .then(comment => dispatch(voteComment(comment, option)));
+};
+
+export const updatePost = (post) => {
+
+  return {
+    type: UPDATE_POST,
+    post
+
+  }
+
+};
+
+export const fetchUpdatePost = (postId, body) => dispatch => {
+
+  ReadableAPI
+    .updatePost(postId, body)
+    .then(post => dispatch(updatePost(post)));
+};
+
+export const updateComment = (comment) => {
+
+  return {
+    type: UPDATE_COMMENT,
+    comment
+
+  }
+
+};
+
+export const fetchUpdateComment = (commentId, body) => dispatch => {
+
+  ReadableAPI
+    .updateComment(commentId, body)
+    .then(comment => dispatch(updateComment(comment)));
+};
+
+export const deletePost = (post) => {
+
+  return {
+    type: DELETE_POST,
+    post
+
+  }
+
+};
+
+export const fetchDeletePost = (postId) => dispatch => {
+
+  ReadableAPI
+    .deletePost(postId)
+    .then(post => dispatch(deletePost(post)));
+};
+
+export const deleteComment = (comment) => {
+
+  return {
+    type: DELETE_COMMENT,
+    comment
+
+  }
+
+};
+
+export const fetchDeleteComment = (commentId) => dispatch => {
+
+  ReadableAPI
+    .deleteComment(commentId)
+    .then(comment => dispatch(deleteComment(comment)));
 };

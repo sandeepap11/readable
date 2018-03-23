@@ -22,7 +22,7 @@ class App extends Component {
         } />
 
         <Route exact path='/category/:category' component={ListPost} />
-        <Route exact path='/category/:category/post/:postId' component={Post} />
+        <Route exact path='/post/:postId' component={Post} />
 
       </div>
     )

@@ -159,31 +159,72 @@ a:visited {
   height: 30px;
 }
 
-.upvote{
+.upvote {
   background-image: url('./icons/upvote.png');
   background-position: center;
   background-size: cover;
   width: 20px;
   height: 20px;
   margin-right: 5px;
+  cursor: pointer;
 }
 
-.downvote{
+.upvote:hover {
+  background-image: url('./icons/upvote-red.png');
+}
+
+.downvote {
   background-image: url('./icons/downvote.png');
   background-position: center;
   background-size: cover;
   width: 20px;
   height: 20px;
   margin-right: 5px;
+  cursor: pointer;
 }
 
-.comments{
+.downvote:hover {
+  background-image: url('./icons/downvote-red.png');
+}
+
+.edit-item {
+  background-image: url('./icons/edit.png');
+  background-position: center;
+  background-size: cover;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.edit-item:hover {
+  background-image: url('./icons/edit-red.png');
+}
+
+.comments {
   background-image: url('./icons/comment.png');
   background-position: center;
   background-size: cover;
   width: 20px;
   height: 20px;
   margin-right: 5px;
+}
+
+.comments:hover{
+  background-image: url('./icons/comment-red.png');
+}
+
+.delete-item {
+  background-image: url('./icons/delete.png');
+  background-position: center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.delete-item:hover{
+  background-image: url('./icons/delete-red.png');
 }
 
 .overlay {
