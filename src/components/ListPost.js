@@ -68,9 +68,6 @@ class ListPost extends Component {
     });
   }
 
-
-
-
   componentDidMount() {
 
 
@@ -110,9 +107,6 @@ class ListPost extends Component {
     }
 
   }
-
-
-
 
   render() {
 

@@ -14,13 +14,7 @@ class App extends Component {
       <div className="app">
         <Navigator />
 
-
-        <Route exact path='/' render={
-
-          () => (<ListPost />)
-
-        } />
-
+        <Route exact path='/' render={() => (<ListPost />)} />
         <Route exact path='/category/:category' component={ListPost} />
         <Route exact path='/post/:postId' component={Post} />
 

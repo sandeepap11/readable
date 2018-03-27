@@ -4,7 +4,10 @@ import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
-import { voteForPost, voteForComment, addNewComment, fetchUpdatePost, fetchUpdateComment } from '../actions';
+import {
+    fetchVotePost, fetchVoteComment, fetchAddNewComment, fetchUpdatePost,
+    fetchUpdateComment, fetchDeletePost, fetchDeleteComment
+} from '../actions';
 import * as PostUtils from '../utils/PostUtils';
 
 class PostView extends Component {
@@ -40,6 +43,16 @@ class PostView extends Component {
 
     voteComment = (commentId, option) => {
         this.props.commentVote(commentId, option);
+
+    }
+
+    deletePost = (postId) => {
+        this.props.removePost(postId);
+
+    }
+
+    deleteComment = (commentId) => {
+        this.props.removeComment(commentId);
 
     }
 
@@ -99,10 +112,14 @@ class PostView extends Component {
         const { post, showComments, comments, category, categories } = this.props;
         const { editPostModal, editCommentModal, commentToEdit } = this.state;
 
+        console.log("post", post);
+        console.log("comments", comments);
+
+
         return (
 
             <div>
-                {(<div className="post" >
+                {(post.deleted === false && <div className="post" >
                     {showComments ? (<h2 > {post.title} </h2>)
                         : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
                     <div className="fine-details">
@@ -119,11 +136,12 @@ class PostView extends Component {
                         <div className="votes"><div className="comments"></div>
                             <p> {post.commentCount} </p></div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
+                        <div className="delete-item" onClick={() => this.deletePost(post.id)}></div>
                     </div>
                     {(showComments) && (post.commentCount > 0) && (post.comments.length > 0) && <div className="comments-section">
                         <h5>COMMENTS</h5>
 
-                        {post.comments.map((comment) => (
+                        {post.comments.filter((comment) => comments[comment].deleted === false).map((comment) => (
 
                             <li className="comment" key={comment}>
                                 <div className="fine-comment-details">
@@ -136,9 +154,10 @@ class PostView extends Component {
                                 <div className="comment-counts" >
                                     <div className="votes">
                                         <div className="upvote" onClick={() => { this.voteComment(comment, "upVote") }} ></div>
-                                        <div className="downvote" onClick={() => { this.voteComment(comment, "downVote") }}></div>                                       
+                                        <div className="downvote" onClick={() => { this.voteComment(comment, "downVote") }}></div>
                                         <p>{comments[comment].voteScore} </p></div>
                                     <div className="edit-item" onClick={() => this.openEditCommentModal(comments[comment])}></div>
+                                    <div className="delete-item" onClick={() => this.deleteComment(comment)}></div>
                                 </div>
 
                             </li>))}
@@ -231,19 +250,25 @@ function mapStateToProps({ posts, categories }) {
 function mapDispatchToProps(dispatch) {
     return {
         postVote: (post, option) => {
-            dispatch(voteForPost(post, option))
+            dispatch(fetchVotePost(post, option))
         },
         commentVote: (comment, option) => {
-            dispatch(voteForComment(comment, option))
+            dispatch(fetchVoteComment(comment, option))
         },
         newComment: (comment) => {
-            dispatch(addNewComment(comment))
+            dispatch(fetchAddNewComment(comment))
         },
         editPost: (postId, post) => {
             dispatch(fetchUpdatePost(postId, post))
         },
         editComment: (commentId, comment) => {
             dispatch(fetchUpdateComment(commentId, comment))
+        },
+        removePost: (postId) => {
+            dispatch(fetchDeletePost(postId))
+        },
+        removeComment: (commentId) => {
+            dispatch(fetchDeleteComment(commentId))
         }
     };
 }

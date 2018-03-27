@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-  LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, GET_POST, ADD_NEW_COMMENT, SET_CATEGORY, 
+  LOAD_POSTS_FOR_CATEGORY, LOAD_ALL_POSTS, ADD_NEW_POST, GET_POST, ADD_NEW_COMMENT, SET_CATEGORY,
   LOAD_CATEGORIES, VOTE_POST, VOTE_COMMENT, UPDATE_POST, UPDATE_COMMENT, DELETE_POST, DELETE_COMMENT
 } from '../actions';
 
@@ -28,7 +28,6 @@ function categories(state = {}, action) {
   }
 }
 
-
 function posts(state = {}, action) {
 
   const { category, posts, post, comments, comment, option } = action;
@@ -40,7 +39,7 @@ function posts(state = {}, action) {
       return {
 
         ...state,
-        posts: posts.filter((post) => post.deleted === false).reduce((result, post) => {
+        posts: posts.reduce((result, post) => {
           result[post.id] = Object.entries(post).reduce((object, entry) => {
             object[entry[0]] = entry[1];
             return object
@@ -55,7 +54,7 @@ function posts(state = {}, action) {
       return {
 
         ...state,
-        posts: posts.filter((post) => post.category === category && post.deleted === false).reduce((result, post) => {
+        posts: posts.filter((post) => post.category === category).reduce((result, post) => {
           result[post.id] = Object.entries(post).reduce((object, entry) => {
             object[entry[0]] = entry[1];
             return object
@@ -83,7 +82,7 @@ function posts(state = {}, action) {
           ...state.posts,
           [post.id]: {
             ...post,
-            comments: comments.filter((comment) => (comment.deleted === false)).map(comment => comment.id)
+            comments: comments.map(comment => comment.id)
           }
         },
         comments: comments.reduce((result, comment) => {
@@ -184,33 +183,39 @@ function posts(state = {}, action) {
         }
       }
 
-      case DELETE_POST:
+    case DELETE_POST:
+      console.log("delete action", post);
+
       return {
         ...state,
         posts: {
           ...state.posts,
           [post.id]: {
             ...state.posts[post.id],
-            deleted:true
+            deleted: true
 
-          }
-        }
-      }      
-
-      case DELETE_COMMENT:
-      return {
-        ...state,
-        comments: {
-          ...state.comments,
-          [comment.id]: {
-            ...state.comments[comment.id],
-            deleted:true
           }
         }
       }
 
-
-  
+    case DELETE_COMMENT:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [comment.parentId]: {
+            ...state.posts[comment.parentId],
+            commentCount: state.posts[comment.parentId].commentCount - 1
+          }
+        },
+        comments: {
+          ...state.comments,
+          [comment.id]: {
+            ...state.comments[comment.id],
+            deleted: true
+          }
+        }
+      }
 
     default:
       return state;

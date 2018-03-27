@@ -115,7 +115,7 @@ export const fetchPostById = (postId) => dispatch => {
     });
 };
 
-export const createNewComment = (comment) => {
+export const addNewComment = (comment) => {
 
   return {
     type: ADD_NEW_COMMENT,
@@ -125,11 +125,11 @@ export const createNewComment = (comment) => {
 
 }
 
-export const addNewComment = (comment) => dispatch => {
+export const fetchAddNewComment = (comment) => dispatch => {
 
   ReadableAPI
     .comment(comment)
-    .then(comment => dispatch(createNewComment(comment)));
+    .then(comment => dispatch(addNewComment(comment)));
 };
 
 export const votePost = (post, option) => {
@@ -143,7 +143,7 @@ export const votePost = (post, option) => {
 
 }
 
-export const voteForPost = (postId, option) => dispatch => {
+export const fetchVotePost = (postId, option) => dispatch => {
 
   ReadableAPI
     .votePost(postId, option)
@@ -161,7 +161,7 @@ export const voteComment = (comment, option) => {
 
 }
 
-export const voteForComment = (commentId, option) => dispatch => {
+export const fetchVoteComment = (commentId, option) => dispatch => {
 
   ReadableAPI
     .voteComment(commentId, option)
