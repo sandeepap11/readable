@@ -71,7 +71,7 @@ class ListPost extends Component {
   componentDidMount() {
 
 
-    Modal.setAppElement('body');
+    Modal.setAppElement('body');    
 
     let selectedCategory = "all";
 
@@ -112,40 +112,43 @@ class ListPost extends Component {
 
     const { addPostsModalOpen, sorter } = this.state;
     const { posts, categories, category } = this.props;
-    let loading = true;
 
-    let sortedPosts = [];
-    sortedPosts = Object.keys(posts).forEach((key, value) => value);
+    let sortedPosts = [];    
 
-    if (Object.values(posts).length > 0) {
-      loading = false;
-      sortedPosts = Object.values(posts).sort((a, b) => (b.timestamp - a.timestamp));
-      if (!sorter.timestamp) {
-        if (sorter.ascending) {
-          sortedPosts = Object.values(posts).sort((a, b) => (a.voteScore - b.voteScore));
-        } else {
-          sortedPosts = Object.values(posts).sort((a, b) => (b.voteScore - a.voteScore));
-        }
-      } else if (sorter.ascending) {
-        sortedPosts = Object.values(posts).sort((a, b) => (a.timestamp - b.timestamp));
+    if (Object.keys(posts).length > 0) {
+      sortedPosts = Object.keys(posts).forEach((key, value) => value);           
+      sortedPosts = Object.values(posts);
+      sortedPosts = sortedPosts.filter((post) => post.deleted !== true);
+
+      if(category !== "all") {
+        sortedPosts = sortedPosts.filter((post) => post.category === category);
       }
 
-
+      sortedPosts = sortedPosts.sort((a, b) => (b.timestamp - a.timestamp));
+      if (!sorter.timestamp) {
+        if (sorter.ascending) {
+          sortedPosts = sortedPosts.sort((a, b) => (a.voteScore - b.voteScore));
+        } else {
+          sortedPosts = sortedPosts.sort((a, b) => (b.voteScore - a.voteScore));
+        }
+      } else if (sorter.ascending) {
+        sortedPosts = sortedPosts.sort((a, b) => (a.timestamp - b.timestamp));
+      }
     }
 
     return (<div>
 
-      <div className="posts" >
-        {loading && <div>Loadin ...</div>}
+      <div className="posts" >      
         <button className="btn-add-post"
           onClick={
             this.openAddPostsModal
-          } > New Post </button> <div className="posts-header" >
+          } > New Post </button> 
+          <div className="posts-header" >
           <h1 className="posts-heading" > {
             capitalize.words(`${category} posts`)
           } </h1>
           <div className="posts-sort" >
-            Sort By < select onChange={
+            <select onChange={
               (event) => this.sortSelect(event.target)
             }>
               <option value="false-true" > Newest First </option>
@@ -156,15 +159,16 @@ class ListPost extends Component {
             </select>
           </div >
         </div>
-
+        { ( sortedPosts.length === 0) && 
+        <div className="no-results"><p>Erm, no results to show!</p></div> }
         {
-          sortedPosts !== undefined && <ul > {
+         (sortedPosts.length !== 0) && <ul > {
             sortedPosts.map(post => (< li className="posts-list"
               key={post.id} >
               <PostView post={post} showComments={false} />
             </li>))}
 
-          </ul>} </div >
+          </ul>} </div>
 
 
       <Modal className="modal"

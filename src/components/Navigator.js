@@ -35,7 +35,7 @@ class Navigator extends Component {
                         {capitalize.words(thisCategory)}
                       </li >}
                     {(thisCategory !== category) &&
-                      <li className="">
+                      <li className=" ">
                         {capitalize.words(thisCategory)}
                       </li >}
                   </Link>)

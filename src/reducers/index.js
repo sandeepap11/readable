@@ -184,7 +184,6 @@ function posts(state = {}, action) {
       }
 
     case DELETE_POST:
-      console.log("delete action", post);
 
       return {
         ...state,

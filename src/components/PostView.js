@@ -112,10 +112,6 @@ class PostView extends Component {
         const { post, showComments, comments, category, categories } = this.props;
         const { editPostModal, editCommentModal, commentToEdit } = this.state;
 
-        console.log("post", post);
-        console.log("comments", comments);
-
-
         return (
 
             <div>
@@ -123,29 +119,37 @@ class PostView extends Component {
                     {showComments ? (<h2 > {post.title} </h2>)
                         : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
                     <div className="fine-details">
-                        <p> {post.author} </p>
-                        <p> {capitalize(post.category)} </p>
-                        <p> {PostUtils.getDate(post.timestamp)} </p>
+                        <p> {`@${post.author}`} </p>
+                        <p><Link to={`/category/${post.category}`}>{capitalize(post.category)}</Link></p>
+                        {showComments ? (<p>{PostUtils.getDate(post.timestamp)}</p>)
+                        : (<p><Link to={`/post/${post.id}`}> {PostUtils.getDate(post.timestamp)}</Link></p>)}                     
                     </div>
                     <div className="post-body" >
                         <p > {post.body} </p>
                     </div>
                     <div className="post-counts" >
-                        <div className="votes"><div className="upvote" onClick={() => { this.votePost(post.id, "upVote") }}></div> <div className="downvote" onClick={() => { this.votePost(post.id, "downVote") }}></div>
-                            <p>{post.voteScore} </p></div>
-                        <div className="votes"><div className="comments"></div>
-                            <p> {post.commentCount} </p></div>
+                        <div className="votes">
+                        <div className="upvote" onClick={() => { this.votePost(post.id, "upVote") }}></div>
+                        <p className="vote-value">{post.voteScore} </p>
+                        <div className="downvote" onClick={() => { this.votePost(post.id, "downVote") }}></div>
+                        </div>
+                        
+                        <div className="votes">
+                        {showComments ? (<div className="comments"></div>)
+                        : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
+                            <p> {post.commentCount} </p>
+                        </div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
                         <div className="delete-item" onClick={() => this.deletePost(post.id)}></div>
                     </div>
                     {(showComments) && (post.commentCount > 0) && (post.comments.length > 0) && <div className="comments-section">
-                        <h5>COMMENTS</h5>
+                        <h5>{capitalize("comments")}</h5>
 
                         {post.comments.filter((comment) => comments[comment].deleted === false).map((comment) => (
 
                             <li className="comment" key={comment}>
                                 <div className="fine-comment-details">
-                                    <p> {comments[comment].author} </p>
+                                    <p> {`@${comments[comment].author}`} </p>
                                     <p> {PostUtils.getDate(comments[comment].timestamp)} </p>
                                 </div>
                                 <div className="comment-body" >
@@ -154,8 +158,9 @@ class PostView extends Component {
                                 <div className="comment-counts" >
                                     <div className="votes">
                                         <div className="upvote" onClick={() => { this.voteComment(comment, "upVote") }} ></div>
+                                        <p className="vote-value">{comments[comment].voteScore} </p>
                                         <div className="downvote" onClick={() => { this.voteComment(comment, "downVote") }}></div>
-                                        <p>{comments[comment].voteScore} </p></div>
+                                    </div>                                        
                                     <div className="edit-item" onClick={() => this.openEditCommentModal(comments[comment])}></div>
                                     <div className="delete-item" onClick={() => this.deleteComment(comment)}></div>
                                 </div>
