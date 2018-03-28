@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
+import Modal from 'react-modal';
+import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
 import {
-    fetchVotePost, fetchVoteComment, fetchAddNewComment, fetchUpdatePost,
-    fetchUpdateComment, fetchDeletePost, fetchDeleteComment
+    fetchVotePost, fetchVoteComment, fetchAddNewComment,
+    fetchUpdatePost, fetchUpdateComment, fetchDeletePost, fetchDeleteComment
 } from '../actions';
 import * as PostUtils from '../utils/PostUtils';
 
 class PostView extends Component {
+
+    static propTypes = {
+        post: PropTypes.object.isRequired,
+        showComments: PropTypes.bool,
+		comments: PropTypes.object.isRequired,
+		categories: PropTypes.array.isRequired,
+		category: PropTypes.string.isRequired
+	}
 
     state = {
         editPostModal: false,
@@ -122,21 +131,21 @@ class PostView extends Component {
                         <p> {`@${post.author}`} </p>
                         <p><Link to={`/category/${post.category}`}>{capitalize(post.category)}</Link></p>
                         {showComments ? (<p>{PostUtils.getDate(post.timestamp)}</p>)
-                        : (<p><Link to={`/post/${post.id}`}> {PostUtils.getDate(post.timestamp)}</Link></p>)}                     
+                            : (<p><Link to={`/post/${post.id}`}> {PostUtils.getDate(post.timestamp)}</Link></p>)}
                     </div>
                     <div className="post-body" >
                         <p > {post.body} </p>
                     </div>
                     <div className="post-counts" >
                         <div className="votes">
-                        <div className="upvote" onClick={() => { this.votePost(post.id, "upVote") }}></div>
-                        <p className="vote-value">{post.voteScore} </p>
-                        <div className="downvote" onClick={() => { this.votePost(post.id, "downVote") }}></div>
+                            <div className="upvote" onClick={() => { this.votePost(post.id, "upVote") }}></div>
+                            <p className="vote-value">{post.voteScore} </p>
+                            <div className="downvote" onClick={() => { this.votePost(post.id, "downVote") }}></div>
                         </div>
-                        
+
                         <div className="votes">
-                        {showComments ? (<div className="comments"></div>)
-                        : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
+                            {showComments ? (<div className="comments"></div>)
+                                : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
                             <p> {post.commentCount} </p>
                         </div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
@@ -160,7 +169,7 @@ class PostView extends Component {
                                         <div className="upvote" onClick={() => { this.voteComment(comment, "upVote") }} ></div>
                                         <p className="vote-value">{comments[comment].voteScore} </p>
                                         <div className="downvote" onClick={() => { this.voteComment(comment, "downVote") }}></div>
-                                    </div>                                        
+                                    </div>
                                     <div className="edit-item" onClick={() => this.openEditCommentModal(comments[comment])}></div>
                                     <div className="delete-item" onClick={() => this.deleteComment(comment)}></div>
                                 </div>

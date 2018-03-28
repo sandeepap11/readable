@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import capitalize from 'capitalize';
 import { fetchCategories, setCategory } from '../actions';
 
 class Navigator extends Component {
+
+  static propTypes = {
+		categories: PropTypes.array.isRequired,
+		category: PropTypes.string.isRequired
+	}
 
   componentDidMount() {
     this.props.getCategories();
@@ -50,7 +56,7 @@ class Navigator extends Component {
 
 function mapStateToProps({ categories }) {
 
-  let categoryList = [];
+  let categoryList = [], categoryValue = "";
 
   if (categories.categories !== undefined) {
 
@@ -61,7 +67,11 @@ function mapStateToProps({ categories }) {
     }, []);
   }
 
-  return { categories: categoryList, category: categories.category };
+  if(categories.category !== undefined){
+    categoryValue = categories.category;
+  }
+
+  return { categories: categoryList, category: categoryValue };
 }
 
 function mapDispatchToProps(dispatch) {

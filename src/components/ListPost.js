@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import PostView from './PostView';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
-import * as PostUtils from '../utils/PostUtils';
+import PostView from './PostView';
 import { setCategory, fetchAllPosts, fetchPostsForCategory, addNewPost } from '../actions';
+import * as PostUtils from '../utils/PostUtils';
 import '../App.css';
 
 class ListPost extends Component {
+
+  static propTypes = {
+		posts: PropTypes.object.isRequired,
+		categories: PropTypes.array.isRequired,
+		category: PropTypes.string.isRequired
+	}
 
   state = {
     addPostsModalOpen: false,
@@ -71,7 +78,7 @@ class ListPost extends Component {
   componentDidMount() {
 
 
-    Modal.setAppElement('body');    
+    Modal.setAppElement('body');
 
     let selectedCategory = "all";
 
@@ -113,14 +120,14 @@ class ListPost extends Component {
     const { addPostsModalOpen, sorter } = this.state;
     const { posts, categories, category } = this.props;
 
-    let sortedPosts = [];    
+    let sortedPosts = [];
 
     if (Object.keys(posts).length > 0) {
-      sortedPosts = Object.keys(posts).forEach((key, value) => value);           
+      sortedPosts = Object.keys(posts).forEach((key, value) => value);
       sortedPosts = Object.values(posts);
       sortedPosts = sortedPosts.filter((post) => post.deleted !== true);
 
-      if(category !== "all") {
+      if (category !== "all") {
         sortedPosts = sortedPosts.filter((post) => post.category === category);
       }
 
@@ -138,12 +145,12 @@ class ListPost extends Component {
 
     return (<div>
 
-      <div className="posts" >      
+      <div className="posts" >
         <button className="btn-add-post"
           onClick={
             this.openAddPostsModal
-          } > New Post </button> 
-          <div className="posts-header" >
+          } > New Post </button>
+        <div className="posts-header" >
           <h1 className="posts-heading" > {
             capitalize.words(`${category} posts`)
           } </h1>
@@ -159,10 +166,10 @@ class ListPost extends Component {
             </select>
           </div >
         </div>
-        { ( sortedPosts.length === 0) && 
-        <div className="no-results"><p>Erm, no results to show!</p></div> }
+        {(sortedPosts.length === 0) &&
+          <div className="no-results"><p>Erm, no results to show!</p></div>}
         {
-         (sortedPosts.length !== 0) && <ul > {
+          (sortedPosts.length !== 0) && <ul > {
             sortedPosts.map(post => (< li className="posts-list"
               key={post.id} >
               <PostView post={post} showComments={false} />
@@ -202,7 +209,7 @@ class ListPost extends Component {
 }
 
 function mapStateToProps({ posts, categories }) {
-  let postList = {}, categoryList = [];
+  let postList = {}, categoryList = [], categoryValue = "";
 
   if (categories.categories !== undefined) {
     categoryList = categories.categories.reduce((result, category) => {
@@ -216,9 +223,13 @@ function mapStateToProps({ posts, categories }) {
     postList = posts.posts;
   }
 
+  if(categories.category !== undefined){
+    categoryValue = categories.category;
+  }
+
   return {
     posts: postList,
-    categories: categoryList, category: categories.category
+    categories: categoryList, category: categoryValue
   };
 }
 
