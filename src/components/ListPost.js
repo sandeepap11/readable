@@ -37,6 +37,17 @@ class ListPost extends Component {
 
   }
 
+  changedPost = () => {
+
+    if(this.title.value === "" || this.author.value === "" || this.body.value === "") {
+        this.button.disabled = true;
+    }
+    else {
+        this.button.disabled = false;
+    }
+    
+}
+
   submitPost = (e) => {
 
     e.preventDefault();
@@ -188,10 +199,10 @@ class ListPost extends Component {
             <button className="modal-close"
               onClick={this.closeAddPostsModalOpen} >
             </button>
-            <h1 className="posts-heading" > New {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
+            <h1 className="modal-heading" > New {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
             <form onSubmit={this.submitPost} >
-              <input type="text" name="title" placeholder="Enter Title" required />
-              <input type="text" name="author" placeholder="Enter Username" required />
+              <input type="text" ref={(title) => this.title = title} onChange={() => this.changedPost()} name="title" placeholder="Enter Title" required />
+              <input type="text" ref={(author) => this.author = author} onChange={() => this.changedPost()} name="author" placeholder="Enter Username" required />
               {category === "all" &&
                 <select name="category" >
                   {
@@ -199,8 +210,8 @@ class ListPost extends Component {
                       {capitalize.words(thisCategory)} </option>))
                   }
                 </select>}
-              <textarea name="body" placeholder="Write something" required />
-              <button> Post </button>
+              <textarea name="body" ref={(body) => this.body = body} onChange={() => this.changedPost()} placeholder="Write something ..." required />
+              <button disabled name="body" ref={(button) => this.button = button}> Post </button>
             </form>
           </div>
         } </Modal> </div>);

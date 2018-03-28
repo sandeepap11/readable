@@ -60,6 +60,24 @@ class PostView extends Component {
         this.props.removeComment(commentId);
     }
 
+    changedPost = () => {
+        const {post} = this.props;
+
+        if(this.title.value === "" || this.author.value === "" || this.body.value === ""){
+            this.button.disabled = true;
+        }
+        else if((this.title.value !== post.title) || 
+            (this.author.value !== post.author) || 
+            (this.category.value !== post.category) || 
+            (this.body.value !== post.body)){
+                this.button.disabled = false;
+            }
+            else{
+                this.button.disabled = true;
+            }
+        
+    }
+
     submitPost = (e, postId) => {
 
         e.preventDefault();
@@ -82,6 +100,22 @@ class PostView extends Component {
         this.setState({
             editPostModal: false
         });
+    }
+
+    changedComment = () => {
+        const {commentToEdit} = this.state;
+
+        if(this.cAuthor.value === "" || this.cBody.value === ""){
+            this.cButton.disabled = true;
+        }
+        else if((this.cAuthor.value !== commentToEdit.author) || 
+            (this.cBody.value !== commentToEdit.body)){
+                this.cButton.disabled = false;
+            }
+            else{
+                this.cButton.disabled = true;
+            }
+        
     }
 
     submitEditedComment = (e) => {
@@ -107,6 +141,19 @@ class PostView extends Component {
         });
 
     }
+
+    newComment = () => {
+        
+        if(this.nAuthor.value === "" || this.nBody.value === ""){
+            this.nButton.disabled = true;
+        }
+        
+            else{
+                this.nButton.disabled = false;
+            }
+        
+    }
+    
 
     render() {
         const { post, showComments, comments, category, categories } = this.props;
@@ -136,7 +183,7 @@ class PostView extends Component {
 
                         <div className="votes">
                             {showComments ? (<div className="comments"></div>)
-                                : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
+                                : (<Link to={`/post/${post.id}#comment`}><div className="comments"></div></Link>)}
                             <p> {post.commentCount} </p>
                         </div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
@@ -170,10 +217,10 @@ class PostView extends Component {
                     }
                     {(showComments) && (
                         <form className="add-comment" onSubmit={(event) => { this.submitComment(event, post.id) }} >
-                            <textarea name="body" placeholder="Write a comment ..." required></textarea>
+                            <textarea id="comment" name="body" ref={(nBody) => this.nBody = nBody}  onChange={(event) => this.newComment()} placeholder="Write a comment ..."></textarea>
                             <div>
-                                <input type="text" name="author" placeholder="Enter Username" required />
-                                <button className="submit-comment">Submit</button>
+                                <input type="text" name="author" ref={(nAuthor) => this.nAuthor = nAuthor}  onChange={(event) => this.newComment()} placeholder="Enter Username" />
+                                <button className="submit-comment" ref={(nButton) => this.nButton = nButton}  disabled>Submit</button>
                             </div>
                         </form>
                     )}
@@ -189,18 +236,18 @@ class PostView extends Component {
                             <button className="modal-close"
                                 onClick={this.closeEditPostModal} >
                             </button>
-                            <h1 className="posts-heading" > Edit {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
+                            <h1 className="modal-heading" > Edit {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
                             <form onSubmit={(event) => this.submitPost(event, post.id)} >
-                                <input type="text" name="title" required defaultValue={post.title} />
-                                <input type="text" name="author" required defaultValue={post.author} />
-                                <select name="category" defaultValue={post.category}>
+                                <input type="text"  ref={(title) => this.title = title} onChange={() => this.changedPost()} name="title" defaultValue={post.title} />
+                                <input type="text"  ref={(author) => this.author = author} onChange={() => this.changedPost()} name="author" defaultValue={post.author} />
+                                <select name="category"  ref={(category) => this.category = category} onChange={(event) => this.changedPost()} defaultValue={post.category}>
                                     {
                                         categories.map((thisCategory) => (<option value={thisCategory} key={thisCategory}>
                                             {capitalize.words(thisCategory)} </option>))
                                     }
                                 </select>
-                                <textarea name="body" required defaultValue={post.body} />
-                                <button> Post </button>
+                                <textarea name="body"  ref={(body) => this.body = body}  onChange={(event) => this.changedPost()} defaultValue={post.body} />
+                                <button disabled  ref={(button) => this.button = button}> Post </button>
                             </form>
                         </div>
                     } </Modal>
@@ -215,11 +262,11 @@ class PostView extends Component {
                             <button className="modal-close"
                                 onClick={this.closeEditCommentModal} >
                             </button>
-                            <h1 className="posts-heading" > Edit Comment </h1>
+                            <h1 className="modal-heading" > Edit Comment </h1>
                             <form onSubmit={(event) => this.submitEditedComment(event)} >
-                                <input type="text" name="author" required defaultValue={commentToEdit.author} />
-                                <textarea name="body" required defaultValue={commentToEdit.body} />
-                                <button> Submit </button>
+                                <input type="text" name="author"  ref={(cAuthor) => this.cAuthor = cAuthor} onChange={() => this.changedComment()} defaultValue={commentToEdit.author} />
+                                <textarea name="body" ref={(cBody) => this.cBody = cBody} onChange={() => this.changedComment()} defaultValue={commentToEdit.body} />
+                                <button disabled ref={(cButton) => this.cButton = cButton}> Submit </button>
                             </form>
                         </div>
                     } </Modal>

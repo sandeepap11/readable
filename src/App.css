@@ -101,7 +101,8 @@ a:visited {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: lightsalmon;
+  border-style: none;
+  background: rgb(244, 36, 36);
   background-image: url('./icons/add.svg');
   background-repeat: no-repeat;
   background-position: center;
@@ -111,7 +112,9 @@ a:visited {
   right: 25px;
   top: 25px;
 }
-
+.btn-add-post:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.16), 0 5px 10px rgba(0, 0, 0, 0.23);
+}
 .posts-header {
   display: flex;
   flex-wrap: wrap;
@@ -306,48 +309,91 @@ a:visited {
 
 .modal {
   position: absolute;
-  top: 90px;
-  left: 350px;
-  right: 350px;
-  bottom: 90px;
+  top: 8%;
+  left: 20%;
+  right: 20%;
+  bottom: 8%;
   border: 1px solid rgb(204, 204, 204);
-  background: rgb(255, 255, 255);
   overflow: auto;
-  border-radius: 4px;
+  border-radius: 20px;
   outline: none;
   padding: 20px;
-  border-radius: 3px;
   box-shadow: 0 3px 8px 0 rgba(0, 0, 0, .24), 0 3px 12px 0 rgba(0, 0, 0, .12);
   min-width: 500px;
+  background-color: #F7F7F7;
+}
+
+.modal-heading {
+  font-family: "Open Sans", monospace, sans-serif;
+  text-align: left;
+  width: 95%;
+  color: darkviolet;
+  font-size: 55px;
+  margin-bottom: 10px;
 }
 
 .modal form {
   text-align: center;
+  
 }
 
 .modal form input, .modal form select {
-  font-family: monospace, sans-serif;
-  height: 20px;
-  width: 100%;
-  margin: 5px;
+  font-family: monospace, sans-serif;  
+  width: 98%;
+  padding: 1%;
+  line-height: 23px;
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: firebrick;
+  border: none;
+  border-radius: 10px;
+  
+}
+
+.modal form select{  
+  width: 100.5%;
 }
 
 .modal form textarea {
-  width: 100%;
+  width: 98.25%;
   height: 200px;
   resize: none;
   scroll-behavior: smooth;
-  margin: 5px;  
+  padding: 1%;
+  line-height: 23px;
+  font-size: 18px;
+  color: rgb(56, 84, 161);
+  border: none;
+  border-radius: 10px;
 }
 
 .modal form button {
   font-family: monospace, sans-serif;
   display: block;
-  margin-left: 40%;
-  height: 30px;
-  width: 100px;
-  background-color: inherit;
-  font-weight: bold;
+  width: 60%;
+  margin-left: 20%;
+  height: 35px;
+  margin-top: 10px;
+  color: white;
+  background-color: steelblue;
+  font-family: monospace, sans-serif;
+  font-size: 20px;
+  border-style: none;
+  
+}
+
+.modal form button:hover {
+  border-style: groove;
+  cursor: pointer;
+}
+
+.modal form button:disabled {
+  background-color: gray;
+}
+
+.modal form button:disabled:hover {
+  border-style: none;
+  cursor: default;
 }
 
 .modal-close {
@@ -362,7 +408,7 @@ a:visited {
   background-size: contain;
 }
 
-.modal-close:hover, .modal form button:hover {
+.modal-close:hover {
   background-color: lightgrey
 }
 
@@ -432,12 +478,12 @@ a:visited {
   height: 38px;
   width: 100%;
   border: none;  
-  color: purple;
+  color: green;
   font-family: monospace, sans-serif;
   font-size: 20px;
 }
 
-.add-comment > div > button {
+.submit-comment {
   width: 104%;
   height: 35px;
   margin-top: 5px;
@@ -445,5 +491,18 @@ a:visited {
   background-color: steelblue;
   font-family: monospace, sans-serif;
   font-size: 20px;
-  
+  border-style: none;
+}
+.submit-comment:disabled {
+  background-color: gray;
+}
+
+.submit-comment:hover {
+  border-style: groove;
+  cursor: pointer;
+}
+
+.submit-comment:disabled:hover {
+  border-style: none;
+  cursor: default;
 }
