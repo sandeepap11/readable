@@ -16,10 +16,10 @@ class PostView extends Component {
     static propTypes = {
         post: PropTypes.object.isRequired,
         showComments: PropTypes.bool,
-		comments: PropTypes.object.isRequired,
-		categories: PropTypes.array.isRequired,
-		category: PropTypes.string.isRequired
-	}
+        comments: PropTypes.object.isRequired,
+        categories: PropTypes.array.isRequired,
+        category: PropTypes.string.isRequired
+    }
 
     state = {
         editPostModal: false,
@@ -45,27 +45,23 @@ class PostView extends Component {
     }
 
     votePost = (postId, option) => {
-
         this.props.postVote(postId, option);
-
     }
 
     voteComment = (commentId, option) => {
         this.props.commentVote(commentId, option);
-
     }
 
     deletePost = (postId) => {
         this.props.removePost(postId);
-
     }
 
     deleteComment = (commentId) => {
         this.props.removeComment(commentId);
-
     }
 
     submitPost = (e, postId) => {
+
         e.preventDefault();
         const post = serializeForm(e.target, {
             hash: true
@@ -76,9 +72,6 @@ class PostView extends Component {
 
         this.props.editPost(postId, post);
         this.closeEditPostModal();
-
-
-
     }
 
     openEditPostModal = () => {
@@ -89,11 +82,10 @@ class PostView extends Component {
         this.setState({
             editPostModal: false
         });
-
     }
 
     submitEditedComment = (e) => {
-
+        
         e.preventDefault();
         const comment = serializeForm(e.target, {
             hash: true
@@ -106,9 +98,8 @@ class PostView extends Component {
     }
 
     openEditCommentModal = (commentToEdit) => {
-
         this.setState({ commentToEdit, editCommentModal: true });
-    }
+        }
 
     closeEditCommentModal = () => {
         this.setState({
@@ -125,7 +116,7 @@ class PostView extends Component {
 
             <div>
                 {(post.deleted === false && <div className="post" >
-                    {showComments ? (<h2 > {post.title} </h2>)
+                    {showComments ? (<h2 className="post-view-header"> {post.title} </h2>)
                         : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
                     <div className="fine-details">
                         <p> {`@${post.author}`} </p>
