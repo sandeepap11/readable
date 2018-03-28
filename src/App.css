@@ -135,14 +135,17 @@ a:visited {
   padding: 4px;
   background-color: #E7E7E7;
   border:  white 2px solid;
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .posts-heading {
   text-align: center;
   width: 55%;
   color: darkviolet;
-    
+  border: white 5px solid;
+  border-radius: 5px;
+  background-color: whitesmoke;
+  
 }
 
 .posts-list {
