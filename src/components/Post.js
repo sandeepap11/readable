@@ -9,14 +9,13 @@ class Post extends Component {
 
   static propTypes = {
     posts: PropTypes.object.isRequired
-  }
+  };
 
   componentDidMount() {
     const { postId } = this.props.match.params;
     this.props.fetchPost(postId);
 
     Modal.setAppElement('body');
-
   }
 
   render() {

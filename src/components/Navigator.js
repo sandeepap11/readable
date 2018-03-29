@@ -10,7 +10,7 @@ class Navigator extends Component {
   static propTypes = {
 		categories: PropTypes.array.isRequired,
 		category: PropTypes.string.isRequired
-	}
+	};
 
   componentDidMount() {
     this.props.getCategories();

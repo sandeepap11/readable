@@ -15,7 +15,7 @@ class ListPost extends Component {
     posts: PropTypes.object.isRequired,
     categories: PropTypes.array.isRequired,
     category: PropTypes.string.isRequired
-  }
+  };
 
   state = {
     addPostsModalOpen: false,
@@ -35,7 +35,7 @@ class ListPost extends Component {
       addPostsModalOpen: false
     });
 
-  }
+  };
 
   changedPost = () => {
 
@@ -46,7 +46,7 @@ class ListPost extends Component {
       this.button.disabled = false;
     }
 
-  }
+  };
 
   submitPost = (e) => {
 
@@ -65,7 +65,7 @@ class ListPost extends Component {
 
     this.props.newPost(post);
     this.closeAddPostsModalOpen();
-  }
+  };
 
   sortSelect = (target) => {
     const selector = target.value.split("-");
@@ -84,7 +84,7 @@ class ListPost extends Component {
         timestamp: timestamp
       }
     });
-  }
+  };
 
   componentDidMount() {
 
@@ -126,6 +126,28 @@ class ListPost extends Component {
 
   }
 
+  sortPosts = (postsToSort) => {
+
+    const { sorter } = this.state;
+    
+    if (!sorter.timestamp) {
+      if (sorter.ascending) {
+        return postsToSort.sort((a, b) => (a.voteScore - b.voteScore));
+      }
+      else {
+        return postsToSort.sort((a, b) => (b.voteScore - a.voteScore));
+      }
+    }
+    else {
+      if (sorter.ascending) {
+        return postsToSort.sort((a, b) => (a.timestamp - b.timestamp));
+      }
+      else {
+        return postsToSort.sort((a, b) => (b.timestamp - a.timestamp));
+      }
+    }
+  };
+
   render() {
 
     const { addPostsModalOpen, sorter } = this.state;
@@ -142,16 +164,7 @@ class ListPost extends Component {
         sortedPosts = sortedPosts.filter((post) => post.category === category);
       }
 
-      sortedPosts = sortedPosts.sort((a, b) => (b.timestamp - a.timestamp));
-      if (!sorter.timestamp) {
-        if (sorter.ascending) {
-          sortedPosts = sortedPosts.sort((a, b) => (a.voteScore - b.voteScore));
-        } else {
-          sortedPosts = sortedPosts.sort((a, b) => (b.voteScore - a.voteScore));
-        }
-      } else if (sorter.ascending) {
-        sortedPosts = sortedPosts.sort((a, b) => (a.timestamp - b.timestamp));
-      }
+      sortedPosts = this.sortPosts(sortedPosts);
     }
 
     return (<div>
