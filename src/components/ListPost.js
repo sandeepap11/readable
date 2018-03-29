@@ -12,10 +12,10 @@ import '../App.css';
 class ListPost extends Component {
 
   static propTypes = {
-		posts: PropTypes.object.isRequired,
-		categories: PropTypes.array.isRequired,
-		category: PropTypes.string.isRequired
-	}
+    posts: PropTypes.object.isRequired,
+    categories: PropTypes.array.isRequired,
+    category: PropTypes.string.isRequired
+  }
 
   state = {
     addPostsModalOpen: false,
@@ -39,14 +39,14 @@ class ListPost extends Component {
 
   changedPost = () => {
 
-    if(this.title.value === "" || this.author.value === "" || this.body.value === "") {
-        this.button.disabled = true;
+    if (this.title.value === "" || this.author.value === "" || this.body.value === "") {
+      this.button.disabled = true;
     }
     else {
-        this.button.disabled = false;
+      this.button.disabled = false;
     }
-    
-}
+
+  }
 
   submitPost = (e) => {
 
@@ -155,38 +155,40 @@ class ListPost extends Component {
     }
 
     return (<div>
-
-      <div className="posts" >
-        <button className="btn-add-post"
-          onClick={
-            this.openAddPostsModal
-          } > New Post </button>
-        <div className="posts-header" >
-          <h1 className="posts-heading" > {
-            capitalize.words(`${category} posts`)
-          } </h1>
-          <div className="posts-sort" >
-            <select onChange={
-              (event) => this.sortSelect(event.target)
-            }>
-              <option value="false-true" > Newest First </option>
-              <option value="true-true" > Oldest First </option>
-              <option value="false-false" > Most Popular First </option>
-              <option value="true-false" > Least Popular First </option>
-
-            </select>
-          </div >
+      <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
+      {
+        (sortedPosts.length === 0) &&
+        <div className="no-results">
+          <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
         </div>
-        {(sortedPosts.length === 0) &&
-          <div className="no-results"><p>Erm, no results to show!</p></div>}
-        {
-          (sortedPosts.length !== 0) && <ul > {
-            sortedPosts.map(post => (< li className="posts-list"
-              key={post.id} >
-              <PostView post={post} showComments={false} />
-            </li>))}
+      }
+      {
+        (sortedPosts.length !== 0) && <div className="posts" >
+          <div className="posts-header" >
+            <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
+            {
+              (sortedPosts.length !== 0) &&
+              <div className="posts-sort" >
+                <select onChange={(event) => this.sortSelect(event.target)}>
+                  <option value="false-true" > Newest First </option>
+                  <option value="true-true" > Oldest First </option>
+                  <option value="false-false" > Most Popular First </option>
+                  <option value="true-false" > Least Popular First </option>
+                </select>
+              </div >
+            }
+          </div>
 
-          </ul>} </div>
+          <ul >
+            {
+              sortedPosts.map(post => (< li className="posts-list"
+                key={post.id} >
+                <PostView post={post} showComments={false} />
+              </li>))
+            }
+
+          </ul> </div>
+      }
 
 
       <Modal className="modal"
@@ -194,7 +196,8 @@ class ListPost extends Component {
         isOpen={addPostsModalOpen}
         onRequestClose={this.closeAddPostsModalOpen}
         contentLabel="Modal" >
-        {addPostsModalOpen &&
+        {
+          addPostsModalOpen &&
           <div>
             <button className="modal-close"
               onClick={this.closeAddPostsModalOpen} >
@@ -214,7 +217,10 @@ class ListPost extends Component {
               <button disabled name="body" ref={(button) => this.button = button}> Post </button>
             </form>
           </div>
-        } </Modal> </div>);
+        }
+      </Modal>
+    </div>
+    );
 
   };
 }
@@ -234,7 +240,7 @@ function mapStateToProps({ posts, categories }) {
     postList = posts.posts;
   }
 
-  if(categories.category !== undefined){
+  if (categories.category !== undefined) {
     categoryValue = categories.category;
   }
 

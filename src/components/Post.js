@@ -8,8 +8,8 @@ import { fetchPostById } from '../actions';
 class Post extends Component {
 
   static propTypes = {
-		posts: PropTypes.object.isRequired
-	}
+    posts: PropTypes.object.isRequired
+  }
 
   componentDidMount() {
     const { postId } = this.props.match.params;
@@ -26,10 +26,15 @@ class Post extends Component {
 
     return (
 
-      <div className="posts">
-        {posts[postId] !== undefined && posts[postId].comments !== undefined && <PostView post={posts[postId]} showComments={true} />}
+      <div>
+        {(posts[postId] === undefined || posts[postId].deleted) &&
+          <div className="no-results">
+            <p>The post has been deleted or it does not exist </p>
+          </div>}
+        <div className="posts">
+          {posts[postId] !== undefined && posts[postId].comments !== undefined && <PostView post={posts[postId]} showComments={true} />}
+        </div>
       </div>
-
     )
   };
 }

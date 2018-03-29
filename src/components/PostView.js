@@ -19,12 +19,15 @@ class PostView extends Component {
         comments: PropTypes.object.isRequired,
         categories: PropTypes.array.isRequired,
         category: PropTypes.string.isRequired
-    }
+    };
 
     state = {
         editPostModal: false,
         editCommentModal: false,
-        commentToEdit: {}
+        openPromptModal: false,
+        commentToEdit: {},
+        type: "",
+        id: ""
     };
 
     submitComment = (e, postId) => {
@@ -42,41 +45,34 @@ class PostView extends Component {
         comment["parentId"] = postId;
         this.props.newComment(comment);
 
-    }
+    };
 
     votePost = (postId, option) => {
         this.props.postVote(postId, option);
-    }
+    };
 
     voteComment = (commentId, option) => {
         this.props.commentVote(commentId, option);
-    }
+    };
 
-    deletePost = (postId) => {
-        this.props.removePost(postId);
-    }
-
-    deleteComment = (commentId) => {
-        this.props.removeComment(commentId);
-    }
 
     changedPost = () => {
-        const {post} = this.props;
+        const { post } = this.props;
 
-        if(this.title.value === "" || this.author.value === "" || this.body.value === ""){
+        if (this.title.value === "" || this.author.value === "" || this.body.value === "") {
             this.button.disabled = true;
         }
-        else if((this.title.value !== post.title) || 
-            (this.author.value !== post.author) || 
-            (this.category.value !== post.category) || 
-            (this.body.value !== post.body)){
-                this.button.disabled = false;
-            }
-            else{
-                this.button.disabled = true;
-            }
-        
-    }
+        else if ((this.title.value !== post.title) ||
+            (this.author.value !== post.author) ||
+            (this.category.value !== post.category) ||
+            (this.body.value !== post.body)) {
+            this.button.disabled = false;
+        }
+        else {
+            this.button.disabled = true;
+        }
+
+    };
 
     submitPost = (e, postId) => {
 
@@ -90,36 +86,37 @@ class PostView extends Component {
 
         this.props.editPost(postId, post);
         this.closeEditPostModal();
-    }
+    };
 
     openEditPostModal = () => {
         this.setState({ editPostModal: true });
-    }
+
+    };
 
     closeEditPostModal = () => {
         this.setState({
             editPostModal: false
         });
-    }
+    };
 
     changedComment = () => {
-        const {commentToEdit} = this.state;
+        const { commentToEdit } = this.state;
 
-        if(this.cAuthor.value === "" || this.cBody.value === ""){
+        if (this.cAuthor.value === "" || this.cBody.value === "") {
             this.cButton.disabled = true;
         }
-        else if((this.cAuthor.value !== commentToEdit.author) || 
-            (this.cBody.value !== commentToEdit.body)){
-                this.cButton.disabled = false;
-            }
-            else{
-                this.cButton.disabled = true;
-            }
-        
-    }
+        else if ((this.cAuthor.value !== commentToEdit.author) ||
+            (this.cBody.value !== commentToEdit.body)) {
+            this.cButton.disabled = false;
+        }
+        else {
+            this.cButton.disabled = true;
+        }
+
+    };
 
     submitEditedComment = (e) => {
-        
+
         e.preventDefault();
         const comment = serializeForm(e.target, {
             hash: true
@@ -129,35 +126,60 @@ class PostView extends Component {
 
         this.props.editComment(this.state.commentToEdit.id, comment);
         this.closeEditCommentModal();
-    }
+    };
 
     openEditCommentModal = (commentToEdit) => {
         this.setState({ commentToEdit, editCommentModal: true });
-        }
+    };
 
     closeEditCommentModal = () => {
         this.setState({
             editCommentModal: false
         });
 
-    }
+    };
+
+    deletePrompt = (type, id) => {
+
+        this.setState({
+            openPromptModal: true, type, id
+        });
+
+    };
+
+    deleteItem = () => {
+        const { type, id } = this.state;
+        if (type === "post") {
+            this.props.removePost(id);
+        }
+        else {
+            this.props.removeComment(id);
+        }
+        this.closePromptModal();
+    };
+
+    closePromptModal = () => {
+        this.setState({
+            openPromptModal: false
+        });
+    };
 
     newComment = () => {
-        
-        if(this.nAuthor.value === "" || this.nBody.value === ""){
+
+        if (this.nAuthor.value === "" || this.nBody.value === "") {
             this.nButton.disabled = true;
         }
-        
-            else{
-                this.nButton.disabled = false;
-            }
-        
+
+        else {
+            this.nButton.disabled = false;
+        }
+
     }
-    
+
 
     render() {
         const { post, showComments, comments, category, categories } = this.props;
-        const { editPostModal, editCommentModal, commentToEdit } = this.state;
+        const { editPostModal, editCommentModal, commentToEdit, openPromptModal } = this.state;
 
         return (
 
@@ -187,7 +209,7 @@ class PostView extends Component {
                             <p> {post.commentCount} </p>
                         </div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
-                        <div className="delete-item" onClick={() => this.deletePost(post.id)}></div>
+                        <div className="delete-item" onClick={() => this.deletePrompt("post", post.id)}></div>
                     </div>
                     {(showComments) && (post.commentCount > 0) && (post.comments.length > 0) && <div className="comments-section">
                         <h5>{capitalize("comments")}</h5>
@@ -209,7 +231,7 @@ class PostView extends Component {
                                         <div className="downvote" onClick={() => { this.voteComment(comment, "downVote") }}></div>
                                     </div>
                                     <div className="edit-item" onClick={() => this.openEditCommentModal(comments[comment])}></div>
-                                    <div className="delete-item" onClick={() => this.deleteComment(comment)}></div>
+                                    <div className="delete-item" onClick={() => this.deletePrompt("comment", comment)}></div>
                                 </div>
 
                             </li>))}
@@ -217,10 +239,10 @@ class PostView extends Component {
                     }
                     {(showComments) && (
                         <form className="add-comment" onSubmit={(event) => { this.submitComment(event, post.id) }} >
-                            <textarea id="comment" name="body" ref={(nBody) => this.nBody = nBody}  onChange={(event) => this.newComment()} placeholder="Write a comment ..."></textarea>
+                            <textarea id="comment" name="body" ref={(nBody) => this.nBody = nBody} onChange={(event) => this.newComment()} placeholder="Write a comment ..."></textarea>
                             <div>
-                                <input type="text" name="author" ref={(nAuthor) => this.nAuthor = nAuthor}  onChange={(event) => this.newComment()} placeholder="Enter Username" />
-                                <button className="submit-comment" ref={(nButton) => this.nButton = nButton}  disabled>Submit</button>
+                                <input type="text" name="author" ref={(nAuthor) => this.nAuthor = nAuthor} onChange={(event) => this.newComment()} placeholder="Enter Username" />
+                                <button className="submit-comment" ref={(nButton) => this.nButton = nButton} disabled>Submit</button>
                             </div>
                         </form>
                     )}
@@ -238,16 +260,16 @@ class PostView extends Component {
                             </button>
                             <h1 className="modal-heading" > Edit {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
                             <form onSubmit={(event) => this.submitPost(event, post.id)} >
-                                <input type="text"  ref={(title) => this.title = title} onChange={() => this.changedPost()} name="title" defaultValue={post.title} />
-                                <input type="text"  ref={(author) => this.author = author} onChange={() => this.changedPost()} name="author" defaultValue={post.author} />
-                                <select name="category"  ref={(category) => this.category = category} onChange={(event) => this.changedPost()} defaultValue={post.category}>
+                                <input type="text" ref={(title) => this.title = title} onChange={() => this.changedPost()} name="title" defaultValue={post.title} />
+                                <input type="text" ref={(author) => this.author = author} onChange={() => this.changedPost()} name="author" defaultValue={post.author} />
+                                <select name="category" ref={(category) => this.category = category} onChange={(event) => this.changedPost()} defaultValue={post.category}>
                                     {
                                         categories.map((thisCategory) => (<option value={thisCategory} key={thisCategory}>
                                             {capitalize.words(thisCategory)} </option>))
                                     }
                                 </select>
-                                <textarea name="body"  ref={(body) => this.body = body}  onChange={(event) => this.changedPost()} defaultValue={post.body} />
-                                <button disabled  ref={(button) => this.button = button}> Post </button>
+                                <textarea name="body" ref={(body) => this.body = body} onChange={(event) => this.changedPost()} defaultValue={post.body} />
+                                <button disabled ref={(button) => this.button = button}> Post </button>
                             </form>
                         </div>
                     } </Modal>
@@ -264,10 +286,28 @@ class PostView extends Component {
                             </button>
                             <h1 className="modal-heading" > Edit Comment </h1>
                             <form onSubmit={(event) => this.submitEditedComment(event)} >
-                                <input type="text" name="author"  ref={(cAuthor) => this.cAuthor = cAuthor} onChange={() => this.changedComment()} defaultValue={commentToEdit.author} />
+                                <input type="text" name="author" ref={(cAuthor) => this.cAuthor = cAuthor} onChange={() => this.changedComment()} defaultValue={commentToEdit.author} />
                                 <textarea name="body" ref={(cBody) => this.cBody = cBody} onChange={() => this.changedComment()} defaultValue={commentToEdit.body} />
                                 <button disabled ref={(cButton) => this.cButton = cButton}> Submit </button>
                             </form>
+                        </div>
+                    } </Modal>
+
+                <Modal className="prompt"
+                    overlayClassName="overlay"
+                    isOpen={openPromptModal}
+                    onRequestClose={this.closePromptModal}
+                    contentLabel="Modal" >
+                    {
+                        <div className="prompt-modal">
+                            <button className="modal-close"
+                                onClick={this.closePromptModal} >
+                            </button>
+                            <p>Are you sure you want to delete ?</p>
+                            <div>
+                                <button className="prompt-button" onClick={this.deleteItem} autoFocus> Yes </button>
+                                <button className="prompt-button" onClick={this.closePromptModal}> No </button>
+                            </div>
                         </div>
                     } </Modal>
 

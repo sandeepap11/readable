@@ -30,11 +30,8 @@ body {
   margin-left: 40%;
 }
 
-a {
+a, a:visited {
   text-decoration: none;
-}
-
-a:visited {
   color: inherit;
 }
 
@@ -210,6 +207,7 @@ a:visited {
   width: 100%;
   display: flex;  
   justify-content: space-around;
+  margin-bottom: 10px;
 }
 .votes {
   display: flex;
@@ -505,4 +503,73 @@ a:visited {
 .submit-comment:disabled:hover {
   border-style: none;
   cursor: default;
+}
+
+.no-results{
+  color: #af0000;
+  font-family: "Open Sans", Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+  text-align: left;
+  margin: 0 0 0 25%;
+  padding: 160px 0 0 0;
+}
+
+.no-results span {
+  font-family: "Alvo", Helvetica, sans-serif;
+  cursor: pointer;
+  font-style: oblique;
+  font-size: 1.25em;
+  color: teal;
+  display: block;
+  margin: 30px 20% 0 0;
+  }
+
+.prompt {
+  position: absolute;
+  top: 37%;
+  left: 35%;
+  right: 35%;
+  bottom: 40%;
+  border: 1px solid rgb(204, 204, 204);
+  overflow: auto;
+  border-radius: 20px;
+  outline: none;
+  padding: 20px;
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, .24), 0 3px 12px 0 rgba(0, 0, 0, .12);
+  background-color: #F7F7F7;
+}
+
+.prompt-modal {
+  font-family: "Open Sans", monospace, sans-serif;
+  font-size: 18px;  
+  color: darkmagenta;
+  text-align: center;
+}
+
+.prompt-modal p {
+  margin-top: 10px;
+  
+}
+
+.prompt-button {
+  width: 20%;
+  height: 30px;
+  margin-top: 5px;
+  color: white;
+  background-color: grey;
+  font-family: monospace, sans-serif;
+  font-size: 15px;
+  border-style: none;
+  margin-left: 10%;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.prompt-modal div button:first-child:focus{
+  background-color: steelblue;
+}
+
+.prompt-button:focus{
+  background-color: crimson;
 }
