@@ -185,7 +185,6 @@ class PostView extends Component {
         return (
 
             <div>
-                {!loaded && showComments && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
                 {(post.deleted === false && <div className="post" >
                     {showComments ? (<h2 className="post-view-header"> {post.title} </h2>)
                         : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
@@ -321,7 +320,7 @@ class PostView extends Component {
 
 function mapStateToProps({ posts, categories }) {
 
-    let postValue = {}, comments = {}, category = {}, categoryList = {}, loaded = false;
+    let postValue = {}, comments = {}, category = {}, categoryList = [], loaded = false;
 
     if (posts.posts !== undefined) {
         postValue = posts.posts;

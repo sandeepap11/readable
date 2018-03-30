@@ -127,24 +127,25 @@ class ListPost extends Component {
 
   }
 
+
   sortPosts = (postsToSort) => {
 
     const { sorter } = this.state;
 
     if (!sorter.timestamp) {
       if (sorter.ascending) {
-        return postsToSort.sort((a, b) => (a.voteScore - b.voteScore));
+        return postsToSort.sort((firstPost, nextPost) => (firstPost.voteScore - nextPost.voteScore));
       }
       else {
-        return postsToSort.sort((a, b) => (b.voteScore - a.voteScore));
+        return postsToSort.sort((firstPost, nextPost) => (nextPost.voteScore - firstPost.voteScore));
       }
     }
     else {
       if (sorter.ascending) {
-        return postsToSort.sort((a, b) => (a.timestamp - b.timestamp));
+        return postsToSort.sort((firstPost, nextPost) => (firstPost.timestamp - nextPost.timestamp));
       }
       else {
-        return postsToSort.sort((a, b) => (b.timestamp - a.timestamp));
+        return postsToSort.sort((firstPost, nextPost) => (nextPost.timestamp - firstPost.timestamp));
       }
     }
   };
@@ -155,6 +156,9 @@ class ListPost extends Component {
     const { posts, categories, category, loaded } = this.props;
 
     let sortedPosts = [];
+
+    console.log("props", this.props);
+
 
     if (Object.keys(posts).length > 0) {
       sortedPosts = Object.keys(posts).forEach((key, value) => value);
