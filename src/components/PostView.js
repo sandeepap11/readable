@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
+import ReactLoading from 'react-loading'
 import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
@@ -178,12 +179,13 @@ class PostView extends Component {
 
 
     render() {
-        const { post, showComments, comments, category, categories } = this.props;
+        const { post, showComments, comments, category, categories, loaded } = this.props;
         const { editPostModal, editCommentModal, commentToEdit, openPromptModal } = this.state;
 
         return (
 
             <div>
+                {!loaded && showComments && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
                 {(post.deleted === false && <div className="post" >
                     {showComments ? (<h2 className="post-view-header"> {post.title} </h2>)
                         : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
@@ -205,13 +207,14 @@ class PostView extends Component {
 
                         <div className="votes">
                             {showComments ? (<div className="comments"></div>)
-                                : (<Link to={`/post/${post.id}#comment`}><div className="comments"></div></Link>)}
+                                : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
                             <p> {post.commentCount} </p>
                         </div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
                         <div className="delete-item" onClick={() => this.deletePrompt("post", post.id)}></div>
                     </div>
-                    {(showComments) && (post.commentCount > 0) && (post.comments.length > 0) && <div className="comments-section">
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='comment-loading' />}
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments !== undefined) && (post.comments.length > 0) && <div className="comments-section">
                         <h5>{capitalize("comments")}</h5>
 
                         {post.comments.filter((comment) => comments[comment].deleted === false).map((comment) => (
@@ -318,16 +321,22 @@ class PostView extends Component {
 
 function mapStateToProps({ posts, categories }) {
 
-    let postValue = {}, commentValue = {}, categoryValue = {}, categoryList = {};
+    let postValue = {}, comments = {}, category = {}, categoryList = {}, loaded = false;
 
-    if (posts.posts !== undefined)
+    if (posts.posts !== undefined) {
         postValue = posts.posts;
+    }
 
-    if (posts.comments !== undefined)
-        commentValue = posts.comments;
 
-    if (categories.category !== undefined)
-        categoryValue = categories.category;
+    if (posts.comments !== undefined) {
+        comments = posts.comments;
+        loaded = true;
+    }
+
+
+    if (categories.category !== undefined) {
+        category = categories.category;
+    }
 
     if (categories.categories !== undefined) {
         categoryList = categories.categories.reduce((result, category) => {
@@ -336,7 +345,7 @@ function mapStateToProps({ posts, categories }) {
         }, []);
     }
 
-    return { posts: postValue, comments: commentValue, category: categoryValue, categories: categoryList };
+    return { posts: postValue, comments, category, categories: categoryList, loaded };
 }
 
 function mapDispatchToProps(dispatch) {

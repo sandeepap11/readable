@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import ReactLoading from 'react-loading'
+import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
 import PostView from './PostView';
@@ -129,7 +130,7 @@ class ListPost extends Component {
   sortPosts = (postsToSort) => {
 
     const { sorter } = this.state;
-    
+
     if (!sorter.timestamp) {
       if (sorter.ascending) {
         return postsToSort.sort((a, b) => (a.voteScore - b.voteScore));
@@ -150,8 +151,8 @@ class ListPost extends Component {
 
   render() {
 
-    const { addPostsModalOpen, sorter } = this.state;
-    const { posts, categories, category } = this.props;
+    const { addPostsModalOpen } = this.state;
+    const { posts, categories, category, loaded } = this.props;
 
     let sortedPosts = [];
 
@@ -167,79 +168,85 @@ class ListPost extends Component {
       sortedPosts = this.sortPosts(sortedPosts);
     }
 
-    return (<div>
-      <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
-      {
-        (sortedPosts.length === 0) &&
-        <div className="no-results">
-          <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
-        </div>
-      }
-      {
-        (sortedPosts.length !== 0) && <div className="posts" >
-          <div className="posts-header" >
-            <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
-            {
-              (sortedPosts.length !== 0) &&
-              <div className="posts-sort" >
-                <select onChange={(event) => this.sortSelect(event.target)}>
-                  <option value="false-true" > Newest First </option>
-                  <option value="true-true" > Oldest First </option>
-                  <option value="false-false" > Most Popular First </option>
-                  <option value="true-false" > Least Popular First </option>
-                </select>
-              </div >
-            }
-          </div>
-
-          <ul >
-            {
-              sortedPosts.map(post => (< li className="posts-list"
-                key={post.id} >
-                <PostView post={post} showComments={false} />
-              </li>))
-            }
-
-          </ul> </div>
-      }
-
-
-      <Modal className="modal"
-        overlayClassName="overlay"
-        isOpen={addPostsModalOpen}
-        onRequestClose={this.closeAddPostsModalOpen}
-        contentLabel="Modal" >
+    return (
+      <div>
+        {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
+        <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
         {
-          addPostsModalOpen &&
-          <div>
-            <button className="modal-close"
-              onClick={this.closeAddPostsModalOpen} >
-            </button>
-            <h1 className="modal-heading" > New {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
-            <form onSubmit={this.submitPost} >
-              <input type="text" ref={(title) => this.title = title} onChange={() => this.changedPost()} name="title" placeholder="Enter Title" required />
-              <input type="text" ref={(author) => this.author = author} onChange={() => this.changedPost()} name="author" placeholder="Enter Username" required />
-              {category === "all" &&
-                <select name="category" >
-                  {
-                    categories.map((thisCategory) => (<option value={thisCategory} key={thisCategory}>
-                      {capitalize.words(thisCategory)} </option>))
-                  }
-                </select>}
-              <textarea name="body" ref={(body) => this.body = body} onChange={() => this.changedPost()} placeholder="Write something ..." required />
-              <button disabled name="body" ref={(button) => this.button = button}> Post </button>
-            </form>
+          (loaded && sortedPosts.length === 0) &&
+          <div className="no-results">
+            <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
         }
-      </Modal>
-    </div>
+        {
+          (loaded && sortedPosts.length !== 0) && <div className="posts" >
+            <div className="posts-header" >
+              <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
+              {
+                (sortedPosts.length !== 0) &&
+                <div className="posts-sort" >
+                  <select onChange={(event) => this.sortSelect(event.target)}>
+                    <option value="false-true" > Newest First </option>
+                    <option value="true-true" > Oldest First </option>
+                    <option value="false-false" > Most Popular First </option>
+                    <option value="true-false" > Least Popular First </option>
+                  </select>
+                </div >
+              }
+            </div>
+
+            {
+              (sortedPosts.length !== 0) &&
+              <ul >
+                {
+                  sortedPosts.map(post => (< li className="posts-list"
+                    key={post.id} >
+                    <PostView post={post} showComments={false} />
+                  </li>))
+                }
+
+              </ul>
+            }
+          </div>
+        }
+
+
+        <Modal className="modal"
+          overlayClassName="overlay"
+          isOpen={addPostsModalOpen}
+          onRequestClose={this.closeAddPostsModalOpen}
+          contentLabel="Modal" >
+          {
+            addPostsModalOpen &&
+            <div>
+              <button className="modal-close"
+                onClick={this.closeAddPostsModalOpen} >
+              </button>
+              <h1 className="modal-heading" > New {category === "all" ? "" : `${capitalize(category)} `}Post </h1>
+              <form onSubmit={this.submitPost} >
+                <input type="text" ref={(title) => this.title = title} onChange={() => this.changedPost()} name="title" placeholder="Enter Title" required />
+                <input type="text" ref={(author) => this.author = author} onChange={() => this.changedPost()} name="author" placeholder="Enter Username" required />
+                {category === "all" &&
+                  <select name="category" >
+                    {
+                      categories.map((thisCategory) => (<option value={thisCategory} key={thisCategory}>
+                        {capitalize.words(thisCategory)} </option>))
+                    }
+                  </select>}
+                <textarea name="body" ref={(body) => this.body = body} onChange={() => this.changedPost()} placeholder="Write something ..." required />
+                <button disabled name="body" ref={(button) => this.button = button}> Post </button>
+              </form>
+            </div>
+          }
+        </Modal>
+      </div>
     );
 
   };
 }
 
 function mapStateToProps({ posts, categories }) {
-  let postList = {}, categoryList = [], categoryValue = "";
+  let postList = {}, categoryList = [], category = "", loaded = false;
 
   if (categories.categories !== undefined) {
     categoryList = categories.categories.reduce((result, category) => {
@@ -251,15 +258,15 @@ function mapStateToProps({ posts, categories }) {
   if (posts.posts !== undefined) {
 
     postList = posts.posts;
+    loaded = true;
   }
 
   if (categories.category !== undefined) {
-    categoryValue = categories.category;
+    category = categories.category;
   }
 
   return {
-    posts: postList,
-    categories: categoryList, category: categoryValue
+    posts: postList, categories: categoryList, category, loaded
   };
 }
 

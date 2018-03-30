@@ -8,9 +8,9 @@ import { fetchCategories, setCategory } from '../actions';
 class Navigator extends Component {
 
   static propTypes = {
-		categories: PropTypes.array.isRequired,
-		category: PropTypes.string.isRequired
-	};
+    categories: PropTypes.array.isRequired,
+    category: PropTypes.string.isRequired
+  };
 
   componentDidMount() {
     this.props.getCategories();
@@ -56,22 +56,22 @@ class Navigator extends Component {
 
 function mapStateToProps({ categories }) {
 
-  let categoryList = [], categoryValue = "";
+  let categoriesList = [], category = "";
 
   if (categories.categories !== undefined) {
 
-    categoryList = categories.categories.reduce((result, category) => {
+    categoriesList = categories.categories.reduce((result, category) => {
       result.push(category.name);
       return result;
 
     }, []);
   }
 
-  if(categories.category !== undefined){
-    categoryValue = categories.category;
+  if (categories.category !== undefined) {
+    category = categories.category;
   }
 
-  return { categories: categoryList, category: categoryValue };
+  return { categories: categoriesList, category };
 }
 
 function mapDispatchToProps(dispatch) {
