@@ -1,0 +1,316 @@
+.post {
+    display: flex;
+    background-color: white;
+    margin: 10px 5px 15px 5px;
+    flex-wrap: wrap;
+    box-shadow: 0px 0px 5px 5px lightgray;  
+    border-radius: 10px;
+    
+  }
+  
+  .post:hover {
+    box-shadow: 0px 0px 10px 10px lightgray;    
+  }
+  
+  .post h2 {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: teal;
+    padding: 5px 0 10px 10px;
+    height: 35px;
+    font-size: 30px;
+    background-color: mistyrose;
+  }
+  
+  .post-view-header {
+    width: 100%;
+  }
+  
+  .fine-details {  
+    width: 100%;
+    display: flex;
+    justify-content: space-between;    
+    background-color:whitesmoke;
+  }
+  
+  .fine-details>p {
+    padding: 10px 15px 10px 15px;
+    color: tomato;
+    font-weight: bold;
+    
+  }
+  
+  .post-body {  
+    padding: 10px;
+    width: 100%;
+    min-height: 50px;
+    color: black;
+    line-height: 25px;
+    font-size: 17px;
+    font-style: oblique;
+  }
+  
+  .post-counts {
+    width: 100%;
+    display: flex;  
+    justify-content: space-around;
+    margin-bottom: 10px;
+  }
+  .votes {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80px;
+    height: 30px;
+  }
+  
+  .upvote {
+    background-image: url('../icons/upvote.png');
+    background-position: center;
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .upvote:hover {
+    background-image: url('../icons/upvote-red.png');
+  }
+  
+  .downvote {
+    background-image: url('../icons/downvote.png');
+    background-position: center;
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    margin: 0 5px 0 5px;
+    cursor: pointer;
+  }
+  
+  .downvote:hover {
+    background-image: url('../icons/downvote-red.png');
+  }
+  
+  .vote-value {
+    width: 25px;
+    text-align: center;
+  }
+  
+  .edit-item {
+    background-image: url('../icons/edit.png');
+    background-position: center;
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-item:hover {
+    background-image: url('../icons/edit-red.png');
+  }
+
+  .comment-icon {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 50px;
+    height: 30px;
+  }
+    
+  .comment-icon > a {
+    width: 20px;
+    height: 20px;
+   
+  }
+
+  .comments {
+    background-image: url('../icons/comment.png');
+    background-position: center;
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+ 
+  .comments:hover{
+    background-image: url('../icons/comment-red.png');
+  }
+  
+  .delete-item {
+    background-image: url('../icons/delete.png');
+    background-position: center;
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .delete-item:hover{
+    background-image: url('../icons/delete-red.png');
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(255, 255, 255, 0.75);
+  }
+  
+  .modal {
+    position: absolute;
+    top: 8%;
+    left: 20%;
+    right: 20%;
+    bottom: 8%;
+    border: 1px solid rgb(204, 204, 204);
+    overflow: auto;
+    border-radius: 20px;
+    outline: none;
+    padding: 20px;
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, .24), 0 3px 12px 0 rgba(0, 0, 0, .12);
+    min-width: 500px;
+    background-color: #F7F7F7;
+  }
+  
+  .modal-heading {
+    font-family: "Open Sans", monospace, sans-serif;
+    text-align: left;
+    width: 95%;
+    color: darkviolet;
+    font-size: 55px;
+    margin-bottom: 10px;
+  }
+  
+  .modal form {
+    text-align: center;
+    
+  }
+  
+  .modal form input, .modal form select {
+    font-family: monospace, sans-serif;  
+    width: 98%;
+    padding: 1%;
+    line-height: 23px;
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: firebrick;
+    border: none;
+    border-radius: 10px;
+    
+  }
+  
+  .modal form select{  
+    width: 100.5%;
+  }
+  
+  .modal form textarea {
+    width: 98.25%;
+    height: 200px;
+    resize: none;
+    scroll-behavior: smooth;
+    padding: 1%;
+    line-height: 23px;
+    font-size: 18px;
+    color: rgb(56, 84, 161);
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .modal form button {
+    font-family: monospace, sans-serif;
+    display: block;
+    width: 60%;
+    margin-left: 20%;
+    height: 35px;
+    margin-top: 10px;
+    color: white;
+    background-color: steelblue;
+    font-family: monospace, sans-serif;
+    font-size: 20px;
+    border-style: none;
+    
+  }
+  
+  .modal form button:hover {
+    border-style: groove;
+    cursor: pointer;
+  }
+  
+  .modal form button:disabled {
+    background-color: gray;
+  }
+  
+  .modal form button:disabled:hover {
+    border-style: none;
+    cursor: default;
+  }
+  
+  .modal-close {
+    float: right;
+    height: 30px;
+    width: 30px;
+    background-color: inherit;
+    color: black;
+    border: none;
+    font-weight: bold;
+    background-image: url('../icons/close.png');
+    background-size: contain;
+  }
+  
+  .modal-close:hover {
+    background-color: lightgrey
+  }
+    
+  .prompt {
+    position: absolute;
+    top: 37%;
+    left: 35%;
+    right: 35%;
+    bottom: 40%;
+    border: 1px solid rgb(204, 204, 204);
+    overflow: auto;
+    border-radius: 20px;
+    outline: none;
+    padding: 20px;
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, .24), 0 3px 12px 0 rgba(0, 0, 0, .12);
+    background-color: #F7F7F7;
+  }
+  
+  .prompt-modal {
+    font-family: "Open Sans", monospace, sans-serif;
+    font-size: 18px;  
+    color: darkmagenta;
+    text-align: center;
+  }
+  
+  .prompt-modal p {
+    margin-top: 10px;
+    
+  }
+  
+  .prompt-button {
+    width: 20%;
+    height: 30px;
+    margin-top: 5px;
+    color: white;
+    background-color: grey;
+    font-family: monospace, sans-serif;
+    font-size: 15px;
+    border-style: none;
+    margin-left: 10%;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  .prompt-modal div button:first-child:focus{
+    background-color: steelblue;
+  }
+  
+  .prompt-button:focus{
+    background-color: crimson;
+  }
+  

@@ -8,7 +8,7 @@ import capitalize from 'capitalize';
 import PostView from './PostView';
 import { setCategory, fetchAllPosts, fetchPostsForCategory, addNewPost } from '../actions';
 import * as PostUtils from '../utils/PostUtils';
-import '../App.css';
+import '../css/ListPost.css';
 
 class ListPost extends Component {
 

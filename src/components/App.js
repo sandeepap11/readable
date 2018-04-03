@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import Navigator from './Navigator';
 import ListPost from './ListPost';
 import Post from './Post';
-import '../App.css';
+import '../css/App.css';
 
 class App extends Component {
 

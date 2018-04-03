@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import capitalize from 'capitalize';
 import { fetchCategories, setCategory } from '../actions';
+import '../css/Navigator.css';
 
 class Navigator extends Component {
 
@@ -29,7 +30,7 @@ class Navigator extends Component {
       </div>
 
       <div className="categories">
-        <h3> CATEGORIES </h3> <div className="categories-list" >
+        <h3> CATEGORIES </h3> <div>
 
           <ul> {
             categories.map(

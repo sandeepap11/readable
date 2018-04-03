@@ -6,11 +6,13 @@ import ReactLoading from 'react-loading'
 import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
+import Comment from './Comment';
 import {
-    fetchVotePost, fetchVoteComment, fetchAddNewComment,
+    fetchVotePost, fetchAddNewComment,
     fetchUpdatePost, fetchUpdateComment, fetchDeletePost, fetchDeleteComment
 } from '../actions';
 import * as PostUtils from '../utils/PostUtils';
+import '../css/PostView.css';
 
 class PostView extends Component {
 
@@ -51,11 +53,6 @@ class PostView extends Component {
     votePost = (postId, option) => {
         this.props.postVote(postId, option);
     };
-
-    voteComment = (commentId, option) => {
-        this.props.commentVote(commentId, option);
-    };
-
 
     changedPost = () => {
         const { post } = this.props;
@@ -204,7 +201,7 @@ class PostView extends Component {
                             <div className="downvote" onClick={() => { this.votePost(post.id, "downVote") }}></div>
                         </div>
 
-                        <div className="votes">
+                        <div className="comment-icon">
                             {showComments ? (<div className="comments"></div>)
                                 : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
                             <p> {post.commentCount} </p>
@@ -219,23 +216,9 @@ class PostView extends Component {
                         {post.comments.filter((comment) => comments[comment].deleted === false).map((comment) => (
 
                             <li className="comment" key={comment}>
-                                <div className="fine-comment-details">
-                                    <p> {`@${comments[comment].author}`} </p>
-                                    <p> {PostUtils.getDate(comments[comment].timestamp)} </p>
-                                </div>
-                                <div className="comment-body" >
-                                    <p > {comments[comment].body} </p>
-                                </div>
-                                <div className="comment-counts" >
-                                    <div className="votes">
-                                        <div className="upvote" onClick={() => { this.voteComment(comment, "upVote") }} ></div>
-                                        <p className="vote-value">{comments[comment].voteScore} </p>
-                                        <div className="downvote" onClick={() => { this.voteComment(comment, "downVote") }}></div>
-                                    </div>
-                                    <div className="edit-item" onClick={() => this.openEditCommentModal(comments[comment])}></div>
-                                    <div className="delete-item" onClick={() => this.deletePrompt("comment", comment)}></div>
-                                </div>
-
+                                <Comment comment={comments[comment]}
+                                    openEditCommentModal={this.openEditCommentModal}
+                                    deletePrompt={this.deletePrompt} />
                             </li>))}
                     </div>
                     }
@@ -351,9 +334,6 @@ function mapDispatchToProps(dispatch) {
     return {
         postVote: (post, option) => {
             dispatch(fetchVotePost(post, option))
-        },
-        commentVote: (comment, option) => {
-            dispatch(fetchVoteComment(comment, option))
         },
         newComment: (comment) => {
             dispatch(fetchAddNewComment(comment))

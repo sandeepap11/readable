@@ -1,0 +1,117 @@
+
+  
+  .fine-comment-details {  
+    width: 100%;
+    display: flex;
+    justify-content: space-between;    
+    background-color:whitesmoke;
+  }
+  
+  .fine-comment-details>p {
+    padding: 10px 15px 10px 15px;
+    color: tomato;
+    font-weight: bold;
+    
+  }
+  
+  .comments-section {
+    width: 100%;
+    margin-top: 15px;
+    box-shadow: 0px 0px 5px 5px lightgray;  
+  }
+  
+  .comments-section > h5 {
+    color: rebeccapurple;
+    height: 30px;
+    line-height: 28px;
+    font-size: 20px;
+    margin-left: 15px;
+  }
+  
+  .comments-section > li {
+    list-style: none;
+    margin: 5px 0 10px 0;
+    box-shadow: 0px 0px 5px 5px lightgray; 
+  }
+  
+  .comment-counts {
+    width: 100%;
+    display: flex;
+    background-color: white;
+    justify-content: space-around;
+  }
+  
+  .comment-body {
+    
+    color:navy;
+    margin: 10px;
+    line-height: 20px;
+    font-size: 15px;
+    font-style: oblique;
+  }
+  
+  .add-comment {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: 0px 0px 5px 5px lightgray;  
+  }
+  .add-comment > textarea {
+    width: 60%;
+    height: 70px;
+    resize: none;
+    scroll-behavior: smooth;
+    margin: 15px 5px 5px 5px;
+    border: none;
+    padding: 10px;
+    color: purple;
+    line-height: 25px;
+    font-size: 20px;
+      
+  }
+  
+  .add-comment > div {
+    margin: 15px 5px 5px 5px;
+    width: 33%;
+  }
+  
+  .add-comment > div > input {
+    padding: 0 5px 0 5px;
+    height: 38px;
+    width: 100%;
+    border: none;  
+    color: green;
+    font-family: monospace, sans-serif;
+    font-size: 20px;
+  }
+  
+  .submit-comment {
+    width: 104%;
+    height: 35px;
+    margin-top: 5px;
+    color: white;
+    background-color: steelblue;
+    font-family: monospace, sans-serif;
+    font-size: 20px;
+    border-style: none;
+  }
+  .submit-comment:disabled {
+    background-color: gray;
+  }
+  
+  .submit-comment:hover {
+    border-style: groove;
+    cursor: pointer;
+  }
+  
+  .submit-comment:disabled:hover {
+    border-style: none;
+    cursor: default;
+  }
+  
+ 
+  
+  .comment-loading {
+    align-self: center;
+    padding: 0 70px;
+  }
