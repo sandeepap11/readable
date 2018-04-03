@@ -81,8 +81,8 @@ class ListPost extends Component {
 
     this.setState({
       sorter: {
-        ascending: ascending,
-        timestamp: timestamp
+        ascending,
+        timestamp
       }
     });
   };
@@ -157,19 +157,12 @@ class ListPost extends Component {
 
     let sortedPosts = [];
 
-    console.log("props", this.props);
-
-
     if (Object.keys(posts).length > 0) {
       sortedPosts = Object.keys(posts).forEach((key, value) => value);
       sortedPosts = Object.values(posts);
-      sortedPosts = sortedPosts.filter((post) => post.deleted !== true);
-
-      if (category !== "all") {
-        sortedPosts = sortedPosts.filter((post) => post.category === category);
-      }
 
       sortedPosts = this.sortPosts(sortedPosts);
+
     }
 
     return (
@@ -177,17 +170,17 @@ class ListPost extends Component {
         {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
         <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
         {
-          (loaded && sortedPosts.length === 0) &&
+          (loaded && sortedPosts.filter((post) => !post.deleted).length === 0 ) &&
           <div className="no-results">
             <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
         }
         {
-          (loaded && sortedPosts.length !== 0) && <div className="posts" >
+          (loaded && sortedPosts.filter((post) => !post.deleted).length !== 0) && <div className="posts" >
             <div className="posts-header" >
               <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
               {
-                (sortedPosts.length !== 0) &&
+                (sortedPosts.filter((post) => !post.deleted).length !== 0) &&
                 <div className="posts-sort" >
                   <select onChange={(event) => this.sortSelect(event.target)}>
                     <option value="false-true" > Newest First </option>
@@ -250,7 +243,7 @@ class ListPost extends Component {
 }
 
 function mapStateToProps({ posts, categories }) {
-  let postList = {}, categoryList = [], category = "", loaded = false;
+  let postList = { "id": "teller" }, categoryList = [], category = "", loaded = false;
 
   if (categories.categories !== undefined) {
     categoryList = categories.categories.reduce((result, category) => {

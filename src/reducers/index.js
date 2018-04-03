@@ -40,7 +40,7 @@ function posts(state = {}, action) {
 
         ...state,
         posts: posts.reduce((result, post) => {
-          result[post.id] = Object.entries(post).reduce((object, entry) => {
+          result[post.id] = Object.entries(post).filter((post) => !post.deleted).reduce((object, entry) => {
             object[entry[0]] = entry[1];
             return object
           }, {});
@@ -54,7 +54,7 @@ function posts(state = {}, action) {
       return {
 
         ...state,
-        posts: posts.filter((post) => post.category === category).reduce((result, post) => {
+        posts: posts.filter((post) => post.category === category && !post.deleted).reduce((result, post) => {
           result[post.id] = Object.entries(post).reduce((object, entry) => {
             object[entry[0]] = entry[1];
             return object
