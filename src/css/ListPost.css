@@ -60,3 +60,43 @@
   .posts-list {
     list-style: none;
   }
+
+  .search {
+    
+    margin-top: 20px;
+    height: 35px;
+    width: 40%;
+    display: flex;    
+    width: 50%;
+  }
+
+  .search input, .search button {
+    
+    margin: 0;
+    border:none;;
+    background-color: white;
+    border: 2px solid grey;
+    padding-left: 10px;
+  }
+  .search input {
+    font-family: "Open Sans", monospace, sans-serif;
+    border-right: none;
+    width: 80%;
+    border-radius: 20px 0 0 20px;
+    font-size: 17px;
+    color: navy;
+    font-style: oblique;
+  }
+  .search button {
+    
+    border-left: none;
+    border-radius: 0 20px 20px 0;
+    background-image: url('../icons/close.png');
+    width: 35px;
+    background-size: contain;
+    
+  }
+
+  .search button:hover {
+    background-color: lightgrey
+  }

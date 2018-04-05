@@ -5,6 +5,7 @@ import ReactLoading from 'react-loading'
 import PropTypes from 'prop-types';
 import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
+import Scrollable from './Scrollable';
 import PostView from './PostView';
 import { setCategory, fetchAllPosts, fetchPostsForCategory, addNewPost } from '../actions';
 import * as PostUtils from '../utils/PostUtils';
@@ -20,6 +21,7 @@ class ListPost extends Component {
 
   state = {
     addPostsModalOpen: false,
+    keyword: "",
     sorter: {
       ascending: false,
       timestamp: true
@@ -87,6 +89,44 @@ class ListPost extends Component {
     });
   };
 
+  sortPosts = (postsToSort) => {
+
+    const { sorter } = this.state;
+
+    if (!sorter.timestamp) {
+      if (sorter.ascending) {
+        return postsToSort.sort((firstPost, nextPost) => (firstPost.voteScore - nextPost.voteScore));
+      }
+      else {
+        return postsToSort.sort((firstPost, nextPost) => (nextPost.voteScore - firstPost.voteScore));
+      }
+    }
+    else {
+      if (sorter.ascending) {
+        return postsToSort.sort((firstPost, nextPost) => (firstPost.timestamp - nextPost.timestamp));
+      }
+      else {
+        return postsToSort.sort((firstPost, nextPost) => (nextPost.timestamp - firstPost.timestamp));
+      }
+    }
+  };
+
+  search = (input) => {
+
+    this.setState({
+      keyword: input.value.toUpperCase().trim()
+    });
+
+  };
+
+  clearSearch = () => {
+
+    this.searchInput.value = "";
+    this.setState({
+      keyword: ""
+    });
+  }
+
   componentDidMount() {
 
 
@@ -128,31 +168,11 @@ class ListPost extends Component {
   }
 
 
-  sortPosts = (postsToSort) => {
 
-    const { sorter } = this.state;
-
-    if (!sorter.timestamp) {
-      if (sorter.ascending) {
-        return postsToSort.sort((firstPost, nextPost) => (firstPost.voteScore - nextPost.voteScore));
-      }
-      else {
-        return postsToSort.sort((firstPost, nextPost) => (nextPost.voteScore - firstPost.voteScore));
-      }
-    }
-    else {
-      if (sorter.ascending) {
-        return postsToSort.sort((firstPost, nextPost) => (firstPost.timestamp - nextPost.timestamp));
-      }
-      else {
-        return postsToSort.sort((firstPost, nextPost) => (nextPost.timestamp - firstPost.timestamp));
-      }
-    }
-  };
 
   render() {
 
-    const { addPostsModalOpen } = this.state;
+    const { addPostsModalOpen, keyword } = this.state;
     const { posts, categories, category, loaded } = this.props;
 
     let sortedPosts = [];
@@ -169,8 +189,9 @@ class ListPost extends Component {
       <div>
         {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
         <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
+
         {
-          (loaded && sortedPosts.filter((post) => !post.deleted).length === 0 ) &&
+          (loaded && sortedPosts.filter((post) => !post.deleted).length === 0) &&
           <div className="no-results">
             <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
@@ -179,6 +200,10 @@ class ListPost extends Component {
           (loaded && sortedPosts.filter((post) => !post.deleted).length !== 0) && <div className="posts" >
             <div className="posts-header" >
               <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
+              <div className="search">
+                <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
+                <button onClick={() => this.clearSearch()}></button>
+                </div>
               {
                 (sortedPosts.filter((post) => !post.deleted).length !== 0) &&
                 <div className="posts-sort" >
@@ -188,22 +213,26 @@ class ListPost extends Component {
                     <option value="false-false" > Most Popular First </option>
                     <option value="true-false" > Least Popular First </option>
                   </select>
+                  
                 </div >
               }
+
+              
             </div>
+            <Scrollable>
+              {
+                (sortedPosts.length !== 0) &&
+                <ul >
+                  {
+                    sortedPosts.filter((post) => post.title.toUpperCase().includes(keyword)).map(post => (< li className="posts-list"
+                      key={post.id} >
+                      <PostView post={post} showComments={false} />
+                    </li>))
+                  }
 
-            {
-              (sortedPosts.length !== 0) &&
-              <ul >
-                {
-                  sortedPosts.map(post => (< li className="posts-list"
-                    key={post.id} >
-                    <PostView post={post} showComments={false} />
-                  </li>))
-                }
-
-              </ul>
-            }
+                </ul>
+              }
+            </Scrollable>
           </div>
         }
 
