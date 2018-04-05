@@ -97,7 +97,6 @@ function posts(state = {}, action) {
 
     case ADD_NEW_COMMENT:
 
-
       return {
 
         ...state,

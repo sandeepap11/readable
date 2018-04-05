@@ -39,13 +39,15 @@ class PostView extends Component {
         const comment = serializeForm(e.target, {
             hash: true
         });
-
+        
         e.target.reset();
+        this.nButton.disabled = true;
 
         comment["timestamp"] = (new Date()).getTime();
         comment["id"] = PostUtils.getUUID();
         comment["voteScore"] = 1;
         comment["parentId"] = postId;
+
         this.props.newComment(comment);
 
     };
@@ -79,10 +81,11 @@ class PostView extends Component {
             hash: true
         });
 
+
         post["timestamp"] = (new Date()).getTime();
-
-
+        
         this.props.editPost(postId, post);
+
         this.closeEditPostModal();
     };
 
@@ -163,6 +166,7 @@ class PostView extends Component {
     };
 
     newComment = () => {
+      
 
         if (this.nAuthor.value === "" || this.nBody.value === "") {
             this.nButton.disabled = true;
@@ -171,6 +175,7 @@ class PostView extends Component {
         else {
             this.nButton.disabled = false;
         }
+        
 
     }
 
@@ -179,10 +184,19 @@ class PostView extends Component {
         const { post, showComments, comments, category, categories, loaded } = this.props;
         const { editPostModal, editCommentModal, commentToEdit, openPromptModal } = this.state;
 
+        const postComments = post.comments !== undefined ? 
+                post.comments.sort(
+                    (firstComment, nextComment) => 
+                    (comments[nextComment].timestamp - comments[firstComment].timestamp)
+                ) :
+                [];
+
+                
+
         return (
 
             <div>
-                {(post.deleted === false && <div className="post" >
+                {(post.deleted === false && <div className="post">
                     {showComments ? (<h2 className="post-view-header"> {post.title} </h2>)
                         : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
                     <div className="fine-details">
@@ -209,19 +223,6 @@ class PostView extends Component {
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
                         <div className="delete-item" onClick={() => this.deletePrompt("post", post.id)}></div>
                     </div>
-                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='comment-loading' />}
-                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments !== undefined) && (post.comments.length > 0) && <div className="comments-section">
-                        <h5>{capitalize("comments")}</h5>
-
-                        {post.comments.filter((comment) => comments[comment].deleted === false).map((comment) => (
-
-                            <li className="comment" key={comment}>
-                                <Comment comment={comments[comment]}
-                                    openEditCommentModal={this.openEditCommentModal}
-                                    deletePrompt={this.deletePrompt} />
-                            </li>))}
-                    </div>
-                    }
                     {(showComments) && (
                         <form className="add-comment" onSubmit={(event) => { this.submitComment(event, post.id) }} >
                             <textarea id="comment" name="body" ref={(nBody) => this.nBody = nBody} onChange={(event) => this.newComment()} placeholder="Write a comment ..."></textarea>
@@ -231,6 +232,19 @@ class PostView extends Component {
                             </div>
                         </form>
                     )}
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='comment-loading' />}
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments !== undefined) && (post.comments.length > 0) && <div className="comments-section">
+                        <h5>{capitalize("comments")}</h5>
+
+                        {postComments.filter((comment) => comments[comment].deleted === false).map((comment) => (
+
+                            <li className="comment" key={comment}>
+                                <Comment comment={comments[comment]}
+                                    openEditCommentModal={this.openEditCommentModal}
+                                    deletePrompt={this.deletePrompt} />
+                            </li>))}
+                    </div>
+                    }                    
                 </div>)}
 
                 <Modal className="modal"
