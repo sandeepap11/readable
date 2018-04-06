@@ -184,6 +184,7 @@ class ListPost extends Component {
       sortedPosts = this.sortPosts(sortedPosts);
 
     }
+   
 
     return (
       <div>
@@ -191,11 +192,19 @@ class ListPost extends Component {
         <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
 
         {
-          (loaded && sortedPosts.filter((post) => !post.deleted).length === 0) &&
+          (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted).length === 0) &&
           <div className="no-results">
             <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
         }
+
+        {
+          (loaded && !categories.includes(category) && category !== "all") &&
+          <div className="no-results">
+            <p><span className="page-not-found">404 Error:</span>The category, {category} isn't available.</p>
+          </div>
+        }
+
         {
           (loaded && sortedPosts.filter((post) => !post.deleted).length !== 0) && <div className="posts" >
             <div className="posts-header" >

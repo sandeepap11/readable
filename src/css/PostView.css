@@ -15,11 +15,11 @@
   .post h2 {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    color: teal;
+    color: white;
     padding: 5px 0 10px 10px;
     height: 35px;
     font-size: 30px;
-    background-color: mistyrose;
+    background-color: teal;
   }
   
   .post-view-header {

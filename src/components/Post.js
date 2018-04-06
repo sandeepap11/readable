@@ -23,18 +23,18 @@ class Post extends Component {
   render() {
 
     const { posts, loaded } = this.props;
-    const { postId } = this.props.match.params;
+    const { category, postId } = this.props.match.params;
 
     return (
       <div>
         {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
         {loaded && (<div>
-          {(posts[postId] === undefined || posts[postId].deleted) &&
+          {(posts[postId] === undefined || posts[postId].deleted || posts[postId].category !== category) &&
             <div className="no-results">
-              <p>The post has been deleted or it does not exist </p>
+              <p><span className="page-not-found">404 Error:</span> The post does not exist or it has been deleted  </p>
             </div>}
           <div className="posts">
-            {posts[postId] !== undefined && <PostView post={posts[postId]} showComments={true} />}
+            {posts[postId] !== undefined && (posts[postId].category === category) && <PostView post={posts[postId]} showComments={true} />}
           </div>
         </div>)}
       </div>)

@@ -198,12 +198,12 @@ class PostView extends Component {
             <div>
                 {(post.deleted === false && <div className="post">
                     {showComments ? (<h2 className="post-view-header"> {post.title} </h2>)
-                        : (<Link to={`/post/${post.id}`}><h2> {post.title} </h2></Link>)}
+                        : (<Link to={`/${post.category}/${post.id}`}><h2> {post.title} </h2></Link>)}
                     <div className="fine-details">
                         <p> {`@${post.author}`} </p>
-                        <p><Link to={`/category/${post.category}`}>{capitalize(post.category)}</Link></p>
+                        <p><Link to={`/${post.category}`}>{capitalize(post.category)}</Link></p>
                         {showComments ? (<p>{PostUtils.getDate(post.timestamp)}</p>)
-                            : (<p><Link to={`/post/${post.id}`}> {PostUtils.getDate(post.timestamp)}</Link></p>)}
+                            : (<p><Link to={`/${post.category}/${post.id}`}> {PostUtils.getDate(post.timestamp)}</Link></p>)}
                     </div>
                     <div className="post-body" >
                         <p > {post.body} </p>
@@ -217,7 +217,7 @@ class PostView extends Component {
 
                         <div className="comment-icon">
                             {showComments ? (<div className="comments"></div>)
-                                : (<Link to={`/post/${post.id}`}><div className="comments"></div></Link>)}
+                                : (<Link to={`/${post.category}/${post.id}`}><div className="comments"></div></Link>)}
                             <p> {post.commentCount} </p>
                         </div>
                         <div className="edit-item" onClick={this.openEditPostModal}></div>
