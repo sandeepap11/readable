@@ -191,10 +191,10 @@ class ListPost extends Component {
       <div>
         {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
         {(categories.includes(category) || category === "all") &&
-        <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>}
+          <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>}
 
         {loaded && (!categories.includes(category) && category !== "all") &&
-            <ErrorPage message ={`The category, ${category} is not available.`} />}
+          <ErrorPage message={`The category, ${category} is not available.`} />}
 
         {
           (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted).length === 0) &&
@@ -207,7 +207,7 @@ class ListPost extends Component {
             <div className="posts-header" >
               <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
               <div className="search">
-                <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
+                <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title / Author / Body`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
                 <button onClick={() => this.clearSearch()}></button>
               </div>
               {
@@ -230,10 +230,14 @@ class ListPost extends Component {
                 (sortedPosts.length > 0) &&
                 <ul >
                   {
-                    sortedPosts.filter((post) => post.title.toUpperCase().includes(keyword)).map(post => (< li className="posts-list"
-                      key={post.id} >
-                      <PostView post={post} showComments={false} />
-                    </li>))
+                    sortedPosts.filter((post) =>
+                      post.title.toUpperCase().includes(keyword)
+                      || post.author.toUpperCase().includes(keyword)
+                      || post.body.toUpperCase().includes(keyword))
+                      .map(post => (< li className="posts-list"
+                        key={post.id} >
+                        <PostView post={post} showComments={false} />
+                      </li>))
                   }
 
                 </ul>
