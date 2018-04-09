@@ -25,6 +25,7 @@ class Post extends Component {
 
     const { posts, loaded } = this.props;
     const { category, postId } = this.props.match.params;
+    
 
     return (
       <div>
@@ -43,10 +44,18 @@ class Post extends Component {
 function mapStateToProps({ posts }) {
 
   let postValue = {}, loaded = false;
+ 
 
+  if(posts.id !== undefined){
+    return {id: posts.id}
+  }
 
   if (posts.posts !== undefined) {
     postValue = posts.posts;
+    loaded = true;
+  }
+
+  if(posts.message){
     loaded = true;
   }
 

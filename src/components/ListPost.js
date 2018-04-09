@@ -174,7 +174,7 @@ class ListPost extends Component {
     const { addPostsModalOpen, keyword } = this.state;
     const { posts, categories, category, loaded } = this.props;
 
-    let sortedPosts = [];
+    let sortedPosts = []; 
 
     if (Object.keys(posts).length > 0) {
       sortedPosts = Object.keys(posts).forEach((key, value) => value);
@@ -183,9 +183,6 @@ class ListPost extends Component {
       sortedPosts = this.sortPosts(sortedPosts);
 
     }
-
-
-
 
     return (
       <div>
@@ -291,6 +288,7 @@ class ListPost extends Component {
 
 function mapStateToProps({ posts, categories }) {
   let postList = {}, categoryList = [], category = "", loaded = false;
+ 
 
   if (categories.categories !== undefined) {
     categoryList = categories.categories.reduce((result, category) => {

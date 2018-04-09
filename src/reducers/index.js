@@ -76,6 +76,14 @@ function posts(state = {}, action) {
 
     case GET_POST:
 
+    if(post.message){
+      return {
+        ...state,
+        message: post.message
+      }
+    }
+    
+    
       return {
         ...state,
         posts: {

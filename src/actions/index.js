@@ -108,9 +108,18 @@ export const fetchPostById = (postId) => dispatch => {
   ReadableAPI
     .getPost(postId)
     .then(post => {
-      ReadableAPI
+
+      if(!post.error){
+
+        ReadableAPI
         .getComments(postId)
-        .then(comments => dispatch(getPost(post, comments)));
+        .then(comments => {
+          dispatch(getPost(post, comments))});
+      }
+      else {
+        dispatch(getPost({message:"error"}, []))
+      }
+      
 
     });
 };
