@@ -10,7 +10,7 @@
 
 body {
   font-family: Arvo, sans-serif;  
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
 }
 
 a, a:visited {
@@ -33,7 +33,7 @@ a, a:visited {
     cursor: pointer;
     font-style: oblique;
     font-size: 1.25em;
-    color: teal;
+    color: #008080;
     display: block;
     margin: 30px 20% 0 0;
     }
@@ -42,7 +42,7 @@ a, a:visited {
   padding-top: 60px;
   margin-left: 18%;  
   width: 80%;
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
 }
 
 .loading {

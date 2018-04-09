@@ -169,8 +169,6 @@ class ListPost extends Component {
   }
 
 
-
-
   render() {
 
     const { addPostsModalOpen, keyword } = this.state;

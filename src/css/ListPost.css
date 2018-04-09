@@ -9,7 +9,7 @@
     height: 50px;
     border-radius: 50%;
     border-style: none;
-    background: rgb(244, 36, 36);
+    background: #f42424;
     background-image: url('../icons/add.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -39,13 +39,13 @@
 
   .posts-sort>select {  
     font-family: Raleway, monospace, sans-serif; 
-    color: black;
+    color: #000000;
     border-radius: 20px;
     height: 35px;
     font-size: 15px;
     padding: 4px;
-    background-color: #E7E7E7;
-    border:  white 2px solid;
+    background-color: #e7e7e7;
+    border:  #ffffff 2px solid;
     font-weight: bold;
   }
   
@@ -53,7 +53,7 @@
     font-family: "Open Sans", monospace, sans-serif;
     text-align: left;
     width: 55%;
-    color: darkviolet;
+    color: #9400d3;
     font-size: 55px;
   }
   
@@ -74,8 +74,8 @@
     
     margin: 0;
     border:none;;
-    background-color: white;
-    border: 2px solid grey;
+    background-color: #ffffff;
+    border: 2px solid #808080;
     padding-left: 10px;
   }
   .search input {
@@ -84,7 +84,7 @@
     width: 80%;
     border-radius: 20px 0 0 20px;
     font-size: 17px;
-    color: navy;
+    color: #000080;
     font-style: oblique;
   }
   .search button {
@@ -98,5 +98,5 @@
   }
 
   .search button:hover {
-    background-color: lightgrey
+    background-color: #d3d3d3
   }

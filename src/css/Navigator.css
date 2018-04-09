@@ -4,8 +4,8 @@
     flex-wrap: wrap;
     position: fixed;
     width: 100%;
-    color: snow;
-    background-color: black;
+    color: #fffafa;
+    background-color: #000000;
   }
   
   .title {
@@ -31,11 +31,11 @@
     background-color: #F7F7F7;
     padding: 8px;
     height: 100%;
-    color: rebeccapurple;
+    color: #663399;
   }
   
   .categories h3 {
-    color: grey;
+    color: #808080;
   }
   
   .categories li {
@@ -48,10 +48,10 @@
   .selected-category {
     border-radius: 25%;
     background-color: white;
-    color: rgb(124, 187, 187);
-    box-shadow: 0px 0px 2px 2px lightgray;  
+    color: #7cbbbb;
+    box-shadow: 0px 0px 2px 2px #d3d3d3;  
   }
   .categories li:hover {
     border-radius: 25%;
-    box-shadow: 0px 0px 1px 1px lightgray; 
+    box-shadow: 0px 0px 1px 1px #d3d3d3; 
   }  

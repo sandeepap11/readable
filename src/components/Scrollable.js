@@ -5,7 +5,7 @@ class Scrollable extends Component {
     render() {
         return (
             
-            <div className="fix-my-height">
+            <div className="fix-height">
                {this.props.children} 
             </div>
         );
