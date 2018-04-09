@@ -5,6 +5,7 @@ import ReactLoading from 'react-loading'
 import PropTypes from 'prop-types';
 import PostView from './PostView';
 import { fetchPostById } from '../actions';
+import ErrorPage from './ErrorPage';
 
 class Post extends Component {
 
@@ -27,12 +28,10 @@ class Post extends Component {
 
     return (
       <div>
-        {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
+        {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className="loading" />}
         {loaded && (<div>
           {(posts[postId] === undefined || posts[postId].deleted || posts[postId].category !== category) &&
-            <div className="no-results">
-              <p><span className="page-not-found">404 Error:</span> The post does not exist or it has been deleted  </p>
-            </div>}
+            <ErrorPage message ="The post has been deleted or it does not exist" />}
           <div className="posts">
             {posts[postId] !== undefined && (posts[postId].category === category) && <PostView post={posts[postId]} showComments={true} />}
           </div>

@@ -7,6 +7,7 @@ import serializeForm from 'form-serialize';
 import capitalize from 'capitalize';
 import Scrollable from './Scrollable';
 import PostView from './PostView';
+import ErrorPage from './ErrorPage';
 import { setCategory, fetchAllPosts, fetchPostsForCategory, addNewPost } from '../actions';
 import * as PostUtils from '../utils/PostUtils';
 import '../css/ListPost.css';
@@ -184,12 +185,18 @@ class ListPost extends Component {
       sortedPosts = this.sortPosts(sortedPosts);
 
     }
-   
+
+
+
 
     return (
       <div>
         {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
-        <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
+        {(categories.includes(category) || category === "all") &&
+        <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>}
+
+        {loaded && (!categories.includes(category) && category !== "all") &&
+            <ErrorPage message ={`The category, ${category} is not available.`} />}
 
         {
           (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted).length === 0) &&
@@ -197,14 +204,6 @@ class ListPost extends Component {
             <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
         }
-
-        {
-          (loaded && !categories.includes(category) && category !== "all") &&
-          <div className="no-results">
-            <p><span className="page-not-found">404 Error:</span>The category, {category} isn't available.</p>
-          </div>
-        }
-
         {
           (loaded && sortedPosts.filter((post) => !post.deleted).length !== 0) && <div className="posts" >
             <div className="posts-header" >
@@ -212,7 +211,7 @@ class ListPost extends Component {
               <div className="search">
                 <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
                 <button onClick={() => this.clearSearch()}></button>
-                </div>
+              </div>
               {
                 (sortedPosts.filter((post) => !post.deleted).length !== 0) &&
                 <div className="posts-sort" >
@@ -222,15 +221,15 @@ class ListPost extends Component {
                     <option value="false-false" > Most Popular First </option>
                     <option value="true-false" > Least Popular First </option>
                   </select>
-                  
+
                 </div >
               }
 
-              
+
             </div>
             <Scrollable>
               {
-                (sortedPosts.length !== 0) &&
+                (sortedPosts.length > 0) &&
                 <ul >
                   {
                     sortedPosts.filter((post) => post.title.toUpperCase().includes(keyword)).map(post => (< li className="posts-list"
@@ -281,7 +280,7 @@ class ListPost extends Component {
 }
 
 function mapStateToProps({ posts, categories }) {
-  let postList = { "id": "teller" }, categoryList = [], category = "", loaded = false;
+  let postList = {}, categoryList = [], category = "", loaded = false;
 
   if (categories.categories !== undefined) {
     categoryList = categories.categories.reduce((result, category) => {
