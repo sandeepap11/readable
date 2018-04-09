@@ -14,11 +14,11 @@ class App extends Component {
 
       <div className="app">
         <Navigator />
-        
+
         <Route exact path='/' render={() => (<ListPost />)} />
         <Route exact path='/:category' component={ListPost} />
         <Route exact path='/:category/:postId' component={Post} />
-        <Route exact path='/*/*/*' component={ErrorPage} />        
+        <Route exact path='/*/*/*' component={ErrorPage} />
       </div>
     )
 

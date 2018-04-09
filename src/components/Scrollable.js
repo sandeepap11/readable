@@ -4,9 +4,9 @@ import '../css/Scrollable.css';
 class Scrollable extends Component {
     render() {
         return (
-            
+
             <div className="fix-height">
-               {this.props.children} 
+                {this.props.children}
             </div>
         );
     }

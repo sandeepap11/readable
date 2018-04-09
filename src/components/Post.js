@@ -31,7 +31,7 @@ class Post extends Component {
         {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className="loading" />}
         {loaded && (<div>
           {(posts[postId] === undefined || posts[postId].deleted || posts[postId].category !== category) &&
-            <ErrorPage message ="The post has been deleted or it does not exist" />}
+            <ErrorPage message="The post has been deleted or it does not exist" />}
           <div className="posts">
             {posts[postId] !== undefined && (posts[postId].category === category) && <PostView post={posts[postId]} showComments={true} />}
           </div>

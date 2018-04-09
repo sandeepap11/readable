@@ -210,21 +210,29 @@ class ListPost extends Component {
                 <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title / Author / Body`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
                 <button onClick={() => this.clearSearch()}></button>
               </div>
-              {
-                (sortedPosts.filter((post) => !post.deleted).length !== 0) &&
-                <div className="posts-sort" >
-                  <select onChange={(event) => this.sortSelect(event.target)}>
-                    <option value="false-true" > Newest First </option>
-                    <option value="true-true" > Oldest First </option>
-                    <option value="false-false" > Most Popular First </option>
-                    <option value="true-false" > Least Popular First </option>
-                  </select>
 
-                </div >
-              }
+
+              <div className="posts-sort" >
+                <select onChange={(event) => this.sortSelect(event.target)}>
+                  <option value="false-true" > Newest First </option>
+                  <option value="true-true" > Oldest First </option>
+                  <option value="false-false" > Most Popular First </option>
+                  <option value="true-false" > Least Popular First </option>
+                </select>
+
+              </div >
+
 
 
             </div>
+            <div className="search-count"><p>{`Showing ${sortedPosts.filter((post) =>
+              !post.deleted && (
+                post.title.toUpperCase().includes(keyword)
+                || post.author.toUpperCase().includes(keyword)
+                || post.body.toUpperCase().includes(keyword))).length}
+               of ${sortedPosts.filter((post) =>
+                !post.deleted).length}
+                 ${capitalize(category)} posts`}</p></div>
             <Scrollable>
               {
                 (sortedPosts.length > 0) &&

@@ -39,7 +39,7 @@ class PostView extends Component {
         const comment = serializeForm(e.target, {
             hash: true
         });
-        
+
         e.target.reset();
         this.nButton.disabled = true;
 
@@ -83,7 +83,7 @@ class PostView extends Component {
 
 
         post["timestamp"] = (new Date()).getTime();
-        
+
         this.props.editPost(postId, post);
 
         this.closeEditPostModal();
@@ -166,7 +166,7 @@ class PostView extends Component {
     };
 
     newComment = () => {
-      
+
 
         if (this.nAuthor.value === "" || this.nBody.value === "") {
             this.nButton.disabled = true;
@@ -175,7 +175,7 @@ class PostView extends Component {
         else {
             this.nButton.disabled = false;
         }
-        
+
 
     }
 
@@ -184,14 +184,14 @@ class PostView extends Component {
         const { post, showComments, comments, category, categories, loaded } = this.props;
         const { editPostModal, editCommentModal, commentToEdit, openPromptModal } = this.state;
 
-        const postComments = post.comments !== undefined ? 
-                post.comments.sort(
-                    (firstComment, nextComment) => 
+        const postComments = post.comments !== undefined ?
+            post.comments.sort(
+                (firstComment, nextComment) =>
                     (comments[nextComment].timestamp - comments[firstComment].timestamp)
-                ) :
-                [];
+            ) :
+            [];
 
-                
+
 
         return (
 
@@ -244,7 +244,7 @@ class PostView extends Component {
                                     deletePrompt={this.deletePrompt} />
                             </li>))}
                     </div>
-                    }                    
+                    }
                 </div>)}
 
                 <Modal className="modal"
