@@ -152,7 +152,7 @@ class ListPost extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-   
+
 
     if (nextProps.match && this.props.match.params.category !== nextProps.match.params.category) {
 
@@ -169,7 +169,6 @@ class ListPost extends Component {
     }
 
   }
-
 
   render() {
 

@@ -1,3 +1,14 @@
+
+This only has the frontend part for the readable application. To get started, clone the project and run the below from the top level folder.
+
+- [npm install]
+- [npm start]
+
+Make sure that the backend server is running.
+
+
+
+..................................................................................................................
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
