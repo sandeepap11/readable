@@ -1,8 +1,8 @@
 
 This only has the frontend part for the readable application. To get started, clone the project and run the below from the top level folder.
 
-- [npm install]
-- [npm start]
+- npm install
+- npm start
 
 Make sure that the backend server is running.
 
