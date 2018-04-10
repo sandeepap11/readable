@@ -8,6 +8,8 @@ import '../css/Navigator.css';
 
 class Navigator extends Component {
 
+  // Component for enclosing site header and side bar for all pages
+
   static propTypes = {
     categories: PropTypes.array.isRequired,
     category: PropTypes.string.isRequired

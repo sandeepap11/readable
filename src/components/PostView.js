@@ -215,7 +215,7 @@ class PostView extends Component {
             <div>
                 {(post.deleted === false && <div className="post">
                     {showComments ? (<h2 title={post.title} className="post-view-header"> {post.title} </h2>)
-                        : (<Link to={`/${post.category}/${post.id}`}><h2> {post.title} </h2></Link>)}
+                        : (<Link to={`/${post.category}/${post.id}`}><h2 title={post.title}> {post.title} </h2></Link>)}
                     <div className="fine-details">
                         <p> {`@${post.author}`} </p>
                         <p><Link to={`/${post.category}`}>{capitalize(post.category)}</Link></p>
@@ -249,7 +249,7 @@ class PostView extends Component {
                             </div>
                         </form>
                     )}
-                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="rebeccapurple" className="comment-loading" />}
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="#663399" className="comment-loading" />}
                     {loaded && (showComments) && (post.commentCount > 0) && (post.comments) && (post.comments.length > 0) && <div className="comments-section">
                         <h5>{capitalize("comments")}</h5>
 

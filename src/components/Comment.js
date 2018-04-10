@@ -7,12 +7,18 @@ import '../css/Comment.css';
 
 class Comment extends Component {
 
+    // Defines a single comment
+
     static propTypes = {
         comment: PropTypes.object.isRequired,
         openEditCommentModal: PropTypes.func.isRequired
     };
 
-
+    /**
+     * @description This method updates the votes
+     * @param {string} commentId
+     * @param {string} option - Upvote or Downvote
+     **/
     voteComment = (commentId, option) => {
         this.props.commentVote(commentId, option);
     };

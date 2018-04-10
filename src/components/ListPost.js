@@ -20,6 +20,10 @@ class ListPost extends Component {
     category: PropTypes.string.isRequired
   };
 
+
+  // Define state for modal, search and sorting
+
+
   state = {
     addPostsModalOpen: false,
     keyword: "",
@@ -29,11 +33,18 @@ class ListPost extends Component {
     }
   };
 
+  /**
+     * @description Opens the New Post modal     
+  **/
   openAddPostsModal = () => {
     this.setState({
       addPostsModalOpen: true
     });
   }
+
+  /**
+     * @description Closes the New Post modal     
+  **/
   closeAddPostsModalOpen = () => {
     this.setState({
       addPostsModalOpen: false
@@ -41,6 +52,10 @@ class ListPost extends Component {
 
   };
 
+  /**
+     * @description This method enables / disables submit button based on whether
+     *   all required fields are filled or not.
+  **/
   changedPost = () => {
 
     if (this.title.value === "" || this.author.value === "" || this.body.value === "") {
@@ -52,10 +67,14 @@ class ListPost extends Component {
 
   };
 
-  submitPost = (e) => {
+  /**
+     * @description This method submits a new post and closes the New Post Modal
+     * @param {Event} event
+  **/
+  submitPost = (event) => {
 
-    e.preventDefault();
-    const post = serializeForm(e.target, {
+    event.preventDefault();
+    const post = serializeForm(event.target, {
       hash: true
     });
 
@@ -71,6 +90,10 @@ class ListPost extends Component {
     this.closeAddPostsModalOpen();
   };
 
+  /**
+     * @description This method sets the selected sorting mechanism
+     * @param {string} target - The select element
+  **/
   sortSelect = (target) => {
     const selector = target.value.split("-");
     let ascending = true,
@@ -90,6 +113,11 @@ class ListPost extends Component {
     });
   };
 
+  /**
+     * @description Sort a list of posts based on selected way of sorting
+     * @param {array} postsToSort
+     * @returns {array} Sorted array based on user selection
+  **/
   sortPosts = (postsToSort) => {
 
     const { sorter } = this.state;
@@ -113,6 +141,10 @@ class ListPost extends Component {
 
   };
 
+  /**
+     * @description Sets query string for search
+     * @param {string} input
+  **/
   search = (input) => {
 
     this.setState({
@@ -121,6 +153,9 @@ class ListPost extends Component {
 
   };
 
+  /**
+     * @description Clears query string for search
+  **/
   clearSearch = () => {
 
     this.searchInput.value = "";
@@ -129,8 +164,8 @@ class ListPost extends Component {
     });
   }
 
+  // Sets the category on the list page and gets posts based on it
   componentDidMount() {
-
 
     Modal.setAppElement("body");
 
@@ -151,6 +186,7 @@ class ListPost extends Component {
 
   }
 
+  // Sets the category on changes and gets posts based on it
   componentWillReceiveProps(nextProps) {
 
 
@@ -186,20 +222,32 @@ class ListPost extends Component {
 
     return (
       <div>
-        {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className="loading" />}
-        {(categories.includes(category) || category === "all") &&
-          <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>}
-
-        {loaded && (!categories.includes(category) && category !== "all") &&
-          <ErrorPage message={`The category, ${category} is not available.`} />}
+        {
+          // Show loading bars until posts are retrieved
+          !loaded && <ReactLoading delay={100} type="bars" color="#663399" className="loading" />
+        }
 
         {
+          (categories.includes(category) || category === "all") &&
+          <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>
+        }
+
+        {
+          // Error message for invalid category
+          loaded && (!categories.includes(category) && category !== "all") &&
+          <ErrorPage message={`The category, ${category} is not available.`} />
+        }
+
+        {
+          // Message when posts list is empty
           (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length === 0) &&
           <div className="no-results">
             <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
         }
+
         {
+          // When posts are available show sorting options, search bar and posts list
           (loaded && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length !== 0) && <div className="posts" >
             <div className="posts-header" >
               <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
@@ -216,10 +264,7 @@ class ListPost extends Component {
                   <option value="false-false" > Most Popular First </option>
                   <option value="true-false" > Least Popular First </option>
                 </select>
-
               </div >
-
-
 
             </div>
             <div className="search-count"><p>{`Showing ${sortedPosts.filter((post) =>
@@ -251,7 +296,9 @@ class ListPost extends Component {
           </div>
         }
 
-
+        { 
+          // Modal for New Post 
+        }
         <Modal className="modal"
           overlayClassName="overlay"
           isOpen={addPostsModalOpen}

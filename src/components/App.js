@@ -11,10 +11,11 @@ class App extends Component {
   render() {
 
     return (
+      // Define router paths and direct to Error page for other addresses
 
       <div className="app">
         <Navigator />
-
+        
         <Route exact path='/' render={() => (<ListPost />)} />
         <Route exact path='/:category' component={ListPost} />
         <Route exact path='/:category/:postId' component={Post} />
