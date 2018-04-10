@@ -110,6 +110,7 @@ class ListPost extends Component {
         return postsToSort.sort((firstPost, nextPost) => (nextPost.timestamp - firstPost.timestamp));
       }
     }
+
   };
 
   search = (input) => {
@@ -131,11 +132,11 @@ class ListPost extends Component {
   componentDidMount() {
 
 
-    Modal.setAppElement('body');
+    Modal.setAppElement("body");
 
     let selectedCategory = "all";
 
-    if (this.props.match !== undefined) {
+    if (this.props.match) {
 
       selectedCategory = this.props.match.params.category;
     }
@@ -151,8 +152,9 @@ class ListPost extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+   
 
-    if (nextProps.match !== undefined && this.props.match.params.category !== nextProps.match.params.category) {
+    if (nextProps.match && this.props.match.params.category !== nextProps.match.params.category) {
 
       let selectedCategory = "all";
       selectedCategory = nextProps.match.params.category;
@@ -174,19 +176,18 @@ class ListPost extends Component {
     const { addPostsModalOpen, keyword } = this.state;
     const { posts, categories, category, loaded } = this.props;
 
-    let sortedPosts = []; 
+    let sortedPosts = [];
 
     if (Object.keys(posts).length > 0) {
       sortedPosts = Object.keys(posts).forEach((key, value) => value);
       sortedPosts = Object.values(posts);
-
       sortedPosts = this.sortPosts(sortedPosts);
 
     }
 
     return (
       <div>
-        {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='loading' />}
+        {!loaded && <ReactLoading delay={100} type="bars" color="rebeccapurple" className="loading" />}
         {(categories.includes(category) || category === "all") &&
           <button className="btn-add-post" onClick={this.openAddPostsModal} > New Post </button>}
 
@@ -194,13 +195,13 @@ class ListPost extends Component {
           <ErrorPage message={`The category, ${category} is not available.`} />}
 
         {
-          (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted).length === 0) &&
+          (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length === 0) &&
           <div className="no-results">
             <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
           </div>
         }
         {
-          (loaded && sortedPosts.filter((post) => !post.deleted).length !== 0) && <div className="posts" >
+          (loaded && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length !== 0) && <div className="posts" >
             <div className="posts-header" >
               <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
               <div className="search">
@@ -223,12 +224,12 @@ class ListPost extends Component {
 
             </div>
             <div className="search-count"><p>{`Showing ${sortedPosts.filter((post) =>
-              !post.deleted && (
+              !post.deleted && (post.category === category || category === "all") && (
                 post.title.toUpperCase().includes(keyword)
                 || post.author.toUpperCase().includes(keyword)
                 || post.body.toUpperCase().includes(keyword))).length}
                of ${sortedPosts.filter((post) =>
-                !post.deleted).length}
+                !post.deleted && (post.category === category || category === "all")).length}
                  ${capitalize(category)} posts`}</p></div>
             <Scrollable>
               {
@@ -236,9 +237,9 @@ class ListPost extends Component {
                 <ul >
                   {
                     sortedPosts.filter((post) =>
-                      post.title.toUpperCase().includes(keyword)
-                      || post.author.toUpperCase().includes(keyword)
-                      || post.body.toUpperCase().includes(keyword))
+                      (post.title.toUpperCase().includes(keyword)
+                        || post.author.toUpperCase().includes(keyword)
+                        || post.body.toUpperCase().includes(keyword)) && (post.category === category || category === "all"))
                       .map(post => (< li className="posts-list"
                         key={post.id} >
                         <PostView post={post} showComments={false} />
@@ -288,22 +289,22 @@ class ListPost extends Component {
 
 function mapStateToProps({ posts, categories }) {
   let postList = {}, categoryList = [], category = "", loaded = false;
- 
 
-  if (categories.categories !== undefined) {
+
+  if (categories.categories) {
     categoryList = categories.categories.reduce((result, category) => {
       result.push(category.name);
       return result;
     }, []);
   }
 
-  if (posts.posts !== undefined) {
+  if (posts.posts) {
 
     postList = posts.posts;
     loaded = true;
   }
 
-  if (categories.category !== undefined) {
+  if (categories.category) {
     category = categories.category;
   }
 

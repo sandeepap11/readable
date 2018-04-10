@@ -18,7 +18,7 @@ class Post extends Component {
     const { postId } = this.props.match.params;
     this.props.fetchPost(postId);
 
-    Modal.setAppElement('body');
+    Modal.setAppElement("body");
   }
 
   render() {
@@ -34,7 +34,7 @@ class Post extends Component {
           {(posts[postId] === undefined || posts[postId].deleted || posts[postId].category !== category) &&
             <ErrorPage message="The post has been deleted or it does not exist" />}
           <div className="posts">
-            {posts[postId] !== undefined && (posts[postId].category === category) && <PostView post={posts[postId]} showComments={true} />}
+            {posts[postId] && (posts[postId].category === category) && <PostView post={posts[postId]} showComments={true} />}
           </div>
         </div>)}
       </div>)
@@ -44,13 +44,8 @@ class Post extends Component {
 function mapStateToProps({ posts }) {
 
   let postValue = {}, loaded = false;
- 
 
-  if(posts.id !== undefined){
-    return {id: posts.id}
-  }
-
-  if (posts.posts !== undefined) {
+  if (posts.posts) {
     postValue = posts.posts;
     loaded = true;
   }

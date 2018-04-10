@@ -59,7 +59,7 @@ function mapStateToProps({ categories }) {
 
   let categoriesList = [], category = "";
 
-  if (categories.categories !== undefined) {
+  if (categories.categories) {
 
     categoriesList = categories.categories.reduce((result, category) => {
       result.push(category.name);
@@ -68,7 +68,7 @@ function mapStateToProps({ categories }) {
     }, []);
   }
 
-  if (categories.category !== undefined) {
+  if (categories.category) {
     category = categories.category;
   }
 

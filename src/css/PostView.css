@@ -18,14 +18,19 @@
     color: #ffffff;
     padding: 5px 0 10px 10px;
     height: 35px;
+    width: 98.8%;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
     font-size: 30px;
     background-color: #008080;
   }
-  
-  .post-view-header {
+
+  post-view-header {
     width: 100%;
-  }
-  
+  } 
+
   .fine-details {  
     width: 100%;
     display: flex;

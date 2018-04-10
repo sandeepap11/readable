@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Modal from 'react-modal';
 import ReactLoading from 'react-loading'
 import PropTypes from 'prop-types';
@@ -75,6 +75,7 @@ class PostView extends Component {
     };
 
     submitPost = (e, postId) => {
+        const { showComments } = this.props;
 
         e.preventDefault();
         const post = serializeForm(e.target, {
@@ -87,6 +88,12 @@ class PostView extends Component {
         this.props.editPost(postId, post);
 
         this.closeEditPostModal();
+
+
+        if (showComments) {
+            this.props.history.push(`/${post.category}/${postId}`);
+        }
+
     };
 
     openEditPostModal = () => {
@@ -150,8 +157,18 @@ class PostView extends Component {
 
     deleteItem = () => {
         const { type, id } = this.state;
+        const { category, showComments } = this.props;
+
         if (type === "post") {
             this.props.removePost(id);
+            if (showComments) {
+                if (category === "all") {
+                    this.props.history.push("/");
+                }
+                else {
+                    this.props.history.push(`/${category}`);
+                }
+            }
         }
         else {
             this.props.removeComment(id);
@@ -184,7 +201,7 @@ class PostView extends Component {
         const { post, showComments, comments, category, categories, loaded } = this.props;
         const { editPostModal, editCommentModal, commentToEdit, openPromptModal } = this.state;
 
-        const postComments = post.comments !== undefined ?
+        const postComments = post.comments ?
             post.comments.sort(
                 (firstComment, nextComment) =>
                     (comments[nextComment].timestamp - comments[firstComment].timestamp)
@@ -197,7 +214,7 @@ class PostView extends Component {
 
             <div>
                 {(post.deleted === false && <div className="post">
-                    {showComments ? (<h2 className="post-view-header"> {post.title} </h2>)
+                    {showComments ? (<h2 title={post.title} className="post-view-header"> {post.title} </h2>)
                         : (<Link to={`/${post.category}/${post.id}`}><h2> {post.title} </h2></Link>)}
                     <div className="fine-details">
                         <p> {`@${post.author}`} </p>
@@ -232,8 +249,8 @@ class PostView extends Component {
                             </div>
                         </form>
                     )}
-                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="rebeccapurple" className='comment-loading' />}
-                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments !== undefined) && (post.comments.length > 0) && <div className="comments-section">
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments === undefined) && <ReactLoading delay={100} type="bars" color="rebeccapurple" className="comment-loading" />}
+                    {loaded && (showComments) && (post.commentCount > 0) && (post.comments) && (post.comments.length > 0) && <div className="comments-section">
                         <h5>{capitalize("comments")}</h5>
 
                         {postComments.filter((comment) => comments[comment].deleted === false).map((comment) => (
@@ -319,22 +336,22 @@ function mapStateToProps({ posts, categories }) {
 
     let postValue = {}, comments = {}, category = {}, categoryList = [], loaded = false;
 
-    if (posts.posts !== undefined) {
+    if (posts.posts) {
         postValue = posts.posts;
     }
 
 
-    if (posts.comments !== undefined) {
+    if (posts.comments) {
         comments = posts.comments;
         loaded = true;
     }
 
 
-    if (categories.category !== undefined) {
+    if (categories.category) {
         category = categories.category;
     }
 
-    if (categories.categories !== undefined) {
+    if (categories.categories) {
         categoryList = categories.categories.reduce((result, category) => {
             result.push(category.name);
             return result;
@@ -367,4 +384,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostView);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PostView));
