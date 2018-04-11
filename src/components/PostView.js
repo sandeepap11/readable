@@ -16,6 +16,8 @@ import '../css/PostView.css';
 
 class PostView extends Component {
 
+    // Defines a single Post
+
     static propTypes = {
         post: PropTypes.object.isRequired,
         showComments: PropTypes.bool,
@@ -33,14 +35,19 @@ class PostView extends Component {
         id: ""
     };
 
-    submitComment = (e, postId) => {
+    /**
+     * @description This method submits a new comment
+     * @param {Event} event - The event contains form data
+     * @param {string} postId - The parent post
+    **/
+    submitComment = (event, postId) => {
 
-        e.preventDefault();
-        const comment = serializeForm(e.target, {
+        event.preventDefault();
+        const comment = serializeForm(event.target, {
             hash: true
         });
 
-        e.target.reset();
+        event.target.reset();
         this.nButton.disabled = true;
 
         comment["timestamp"] = (new Date()).getTime();
@@ -52,10 +59,19 @@ class PostView extends Component {
 
     };
 
+    /**
+     * @description This method updates the votes
+     * @param {string} postId
+     * @param {string} option - Upvote or Downvote
+     **/
     votePost = (postId, option) => {
         this.props.postVote(postId, option);
     };
 
+    /**
+     * @description This method enables / disables edit post submit button based on whether
+     *   post values have changed or not, or if they are empty or not
+    **/
     changedPost = () => {
         const { post } = this.props;
 
@@ -74,21 +90,23 @@ class PostView extends Component {
 
     };
 
-    submitPost = (e, postId) => {
+    /**
+     * @description This method submits an edited post
+     * @param {Event} event - The event contains form data
+     * @param {string} postId
+    **/
+    submitPost = (event, postId) => {
         const { showComments } = this.props;
 
-        e.preventDefault();
-        const post = serializeForm(e.target, {
+        event.preventDefault();
+        const post = serializeForm(event.target, {
             hash: true
         });
-
 
         post["timestamp"] = (new Date()).getTime();
 
         this.props.editPost(postId, post);
-
         this.closeEditPostModal();
-
 
         if (showComments) {
             this.props.history.push(`/${post.category}/${postId}`);
@@ -96,17 +114,27 @@ class PostView extends Component {
 
     };
 
+    /**
+     * @description Opens the Edit Post modal     
+    **/
     openEditPostModal = () => {
         this.setState({ editPostModal: true });
 
     };
 
+    /**
+     * @description Closes the Edit Post modal     
+    **/
     closeEditPostModal = () => {
         this.setState({
             editPostModal: false
         });
     };
 
+    /**
+     * @description This method enables / disables edit comment submit button based on whether
+     *   comment values have changed or not, or if they are empty or not
+    **/
     changedComment = () => {
         const { commentToEdit } = this.state;
 
@@ -123,10 +151,14 @@ class PostView extends Component {
 
     };
 
-    submitEditedComment = (e) => {
+    /**
+     * @description This method submits an edited comment
+     * @param {Event} event - The event contains form data
+    **/
+    submitEditedComment = (event) => {
 
-        e.preventDefault();
-        const comment = serializeForm(e.target, {
+        event.preventDefault();
+        const comment = serializeForm(event.target, {
             hash: true
         });
 
@@ -136,10 +168,16 @@ class PostView extends Component {
         this.closeEditCommentModal();
     };
 
+    /**
+     * @description Opens the Edit Comment modal     
+    **/
     openEditCommentModal = (commentToEdit) => {
         this.setState({ commentToEdit, editCommentModal: true });
     };
 
+    /**
+     * @description Closes the Edit Comment modal     
+    **/
     closeEditCommentModal = () => {
         this.setState({
             editCommentModal: false
@@ -147,6 +185,11 @@ class PostView extends Component {
 
     };
 
+    /**
+     * @description This method activates a delete prompt when user tries to delete a Post or Comment
+     * @param {string} type - Post or Comment
+     * @param {string} id - Id of the Post or Comment
+    **/
     deletePrompt = (type, id) => {
 
         this.setState({
@@ -155,6 +198,9 @@ class PostView extends Component {
 
     };
 
+    /**
+     * @description Deletes a post or comment based on the type and id set via deletePrompt method     
+    **/
     deleteItem = () => {
         const { type, id } = this.state;
         const { category, showComments } = this.props;
@@ -176,14 +222,19 @@ class PostView extends Component {
         this.closePromptModal();
     };
 
+    /**
+     * @description Closes the delete prompt
+    **/
     closePromptModal = () => {
         this.setState({
             openPromptModal: false
         });
     };
 
+    /**
+     * @description Validates the new comment form and enables button when values are present
+    **/
     newComment = () => {
-
 
         if (this.nAuthor.value === "" || this.nBody.value === "") {
             this.nButton.disabled = true;
@@ -192,7 +243,6 @@ class PostView extends Component {
         else {
             this.nButton.disabled = false;
         }
-
 
     }
 

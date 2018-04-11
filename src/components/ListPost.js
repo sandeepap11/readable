@@ -69,7 +69,7 @@ class ListPost extends Component {
 
   /**
      * @description This method submits a new post and closes the New Post Modal
-     * @param {Event} event
+     * @param {Event} event - The event contains form data
   **/
   submitPost = (event) => {
 
@@ -241,62 +241,66 @@ class ListPost extends Component {
         {
           // Message when posts list is empty
           (loaded && (categories.includes(category) || category === "all") && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length === 0) &&
-          <div className="no-results">
-            <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
-          </div>
+          (
+            <div className="no-results">
+              <p>No posts available <span onClick={this.openAddPostsModal}>Click to add a post!</span></p>
+            </div>
+          )
         }
 
         {
           // When posts are available show sorting options, search bar and posts list
-          (loaded && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length !== 0) && <div className="posts" >
-            <div className="posts-header" >
-              <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
-              <div className="search">
-                <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title / Author / Body`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
-                <button onClick={() => this.clearSearch()}></button>
+          (loaded && sortedPosts.filter((post) => !post.deleted && (post.category === category || category === "all")).length !== 0) &&
+          (
+            <div className="posts" >
+              <div className="posts-header" >
+                <h1 className="posts-heading" > {capitalize.words(`${category} posts`)} </h1>
+                <div className="search">
+                  <input type="text" name="search" placeholder={`Search ${capitalize(category)} Posts by Title / Author / Body`} onChange={(e) => this.search(e.target)} ref={(searchInput) => this.searchInput = searchInput} />
+                  <button onClick={() => this.clearSearch()}></button>
+                </div>
+
+                <div className="posts-sort" >
+                  <select onChange={(event) => this.sortSelect(event.target)}>
+                    <option value="false-true" > Newest First </option>
+                    <option value="true-true" > Oldest First </option>
+                    <option value="false-false" > Most Popular First </option>
+                    <option value="true-false" > Least Popular First </option>
+                  </select>
+                </div >
+
               </div>
-
-
-              <div className="posts-sort" >
-                <select onChange={(event) => this.sortSelect(event.target)}>
-                  <option value="false-true" > Newest First </option>
-                  <option value="true-true" > Oldest First </option>
-                  <option value="false-false" > Most Popular First </option>
-                  <option value="true-false" > Least Popular First </option>
-                </select>
-              </div >
-
-            </div>
-            <div className="search-count"><p>{`Showing ${sortedPosts.filter((post) =>
-              !post.deleted && (post.category === category || category === "all") && (
-                post.title.toUpperCase().includes(keyword)
-                || post.author.toUpperCase().includes(keyword)
-                || post.body.toUpperCase().includes(keyword))).length}
+              <div className="search-count"><p>{`Showing ${sortedPosts.filter((post) =>
+                !post.deleted && (post.category === category || category === "all") && (
+                  post.title.toUpperCase().includes(keyword)
+                  || post.author.toUpperCase().includes(keyword)
+                  || post.body.toUpperCase().includes(keyword))).length}
                of ${sortedPosts.filter((post) =>
-                !post.deleted && (post.category === category || category === "all")).length}
+                  !post.deleted && (post.category === category || category === "all")).length}
                  ${capitalize(category)} posts`}</p></div>
-            <Scrollable>
-              {
-                (sortedPosts.length > 0) &&
-                <ul >
-                  {
-                    sortedPosts.filter((post) =>
-                      (post.title.toUpperCase().includes(keyword)
-                        || post.author.toUpperCase().includes(keyword)
-                        || post.body.toUpperCase().includes(keyword)) && (post.category === category || category === "all"))
-                      .map(post => (< li className="posts-list"
-                        key={post.id} >
-                        <PostView post={post} showComments={false} />
-                      </li>))
-                  }
+              <Scrollable>
+                {
+                  (sortedPosts.length > 0) &&
+                  <ul >
+                    {
+                      sortedPosts.filter((post) =>
+                        (post.title.toUpperCase().includes(keyword)
+                          || post.author.toUpperCase().includes(keyword)
+                          || post.body.toUpperCase().includes(keyword)) && (post.category === category || category === "all"))
+                        .map(post => (< li className="posts-list"
+                          key={post.id} >
+                          <PostView post={post} showComments={false} />
+                        </li>))
+                    }
 
-                </ul>
-              }
-            </Scrollable>
-          </div>
+                  </ul>
+                }
+              </Scrollable>
+            </div>
+          )
         }
 
-        { 
+        {
           // Modal for New Post 
         }
         <Modal className="modal"
